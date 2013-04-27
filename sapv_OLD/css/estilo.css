@@ -1,0 +1,202 @@
+@charset "utf-8";
+/* CSS Document */
+select{
+    background: #fbfbfb;
+      border-top: solid 1px #aaa;
+  border-left: solid 1px #aaa;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 1px;
+}
+
+*{
+font-family:Tahoma;
+font-size:12px;
+}
+html{
+font-size:12px;
+}
+  body {
+	margin:0;
+	padding:0;
+	font-family:Tahoma;
+	color:#333333;
+
+	}
+.contenido{
+
+background: #fdfdfd;
+}
+.subtitulos{
+	color:#cc0000;
+	font-weight: bold;
+	font-size:12px
+}
+.encabezadoInt{
+	color:#1676bb;
+	font-weight: bold;
+	background-image:url(../images/pfoot.png);
+	background-repeat:repeat-x;
+	background-position:50% 50%;
+
+}
+ .footer{
+color:#1676bb;
+font-weight: bold;
+ /*background-image:url(../images/pfoot.png);
+  background-repeat:repeat-x;
+    background-position:50% 50%;*/
+ }
+ .footer2{
+	color:#1676bb;
+	cursor:pointer;
+	background-image:url(../images/pfoot.png);
+	background-repeat:repeat-x;
+	background-position:50% 50%;
+ }
+
+.general td{
+    padding-left:5px;
+}
+.encabezado, .encabezado a{
+color:#ffffff;
+font-weight: bold;
+ background-image:url(../images/encabeza2.png);
+  background-repeat:repeat-x;
+  background-position:50% 50%;
+  height:25px;
+  font-size: 14px;
+}
+
+table.general{
+font-size:12px;
+
+}
+  .Estilo1 {
+	font-family: Tahoma;
+	font-weight: bold;
+	font-size: 26px;}
+
+
+TD.derecha
+   {
+    border-bottom: 1px #0C9816 solid;
+    text-align: right;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: bold;
+    color: #000000;
+    background-color: #f8f8f8;
+    }
+
+TD.primeralinea
+   {
+
+    border-bottom: 1px #0C9816 solid;
+	border: 1px dotted #0c9816;
+    text-align: center;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: bold;
+    color: #cccccc;
+    background-color: #009966;
+    }
+TD.primeralineaizquierda
+   {
+
+    border-bottom: 1px #0C9816 solid;
+	border: 1px dotted #0c9816;
+    text-align: left;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: bold;
+    color: #000000;
+    background-color: #CCCCCC;
+    }
+TD.segundalinea
+   {
+
+    border-bottom: 1px #0C9816 solid;
+	border-right: 1px #0C9816 solid;
+	border-left: 1px #0C9816 solid;
+    text-align: center;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: normal;
+    color: #404040;
+    background-color: #ffffff;
+    }
+TD.segundalineaizquierda
+   {
+
+    border-bottom: 1px #0C9816 solid;
+	border-right: 1px #0C9816 solid;
+	border-left: 1px #0C9816 solid;
+    text-align: left;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: normal;
+    color: #404040;
+    background-color: #ffffff;
+    }
+
+TD.segundalineaderecha
+   {
+
+    border-bottom: 1px #0C9816 solid;
+	border-right: 1px #0C9816 solid;
+	border-left: 1px #0C9816 solid;
+    text-align: right;
+    font-family: Verdana, sans-serif, Arial;
+    font-weight: normal;
+    color: #404040;
+    background-color: #ffffff;
+    }
+
+.cebra{
+
+	background-color:#fbfbfb;
+}
+#movimientos{
+	position: fixed;
+	position:expression("absolute");
+	bottom:20px;
+	right:2px;
+	width:205px;
+
+}
+#encabezado{
+
+	padding:7px;
+	color: #0073ea;
+	width:200px;
+
+}
+#formucont{
+padding:7px;
+	width:200px;
+
+}
+#main_container {
+	width:100%;
+	background-color:#ffffff; /* DO NOT REMOVE THIS; or you'll have issue w/ the scrollbar, when the mouse pointer is on a white space */
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height:100%;	/* this will make sure that the height will extend at the bottom */
+	position:absolute; /* container div must be absolute, for our fixed bar to work */
+}
+.resaltar{
+    background: url('../images/ordern.png') no-repeat right;
+    border:1px solid #fff;
+}
+.titulosDolor{
+    padding-left: 30px;
+    background: url('../images/arrowblue.png') no-repeat left;
+    height: 30px;
+    font-weight: bold;
+    font-size: 14px;
+    color:#cd1616
+}
+.titulosazul{
+    border-bottom: 2px solid #0364B5;
+    text-align: left;
+    color:#0364B5;
+}
