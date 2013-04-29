@@ -348,7 +348,7 @@ switch ($_GET['accion']){
             }elseif($row_medico['banos']==$i." 1/2"){
                echo "<option selected value='".$i."  1/2'>".$i." 1/2</option>";
                echo "<option value='".$i."'>".$i."</option>";   
-            }elseif($row_medico['banos']==''){
+            }else{
               echo "<option value='".$i."'>".$i."</option>";  
                 echo "<option value='".$i."  1/2'>".$i." 1/2</option>";    
     		}
@@ -824,7 +824,7 @@ text: false
             function guardaDisp(){
                 
            var envias='';
-                        $("#disponibilidad input").each(function(){
+                        $("#disponibilidad input[type='text']").each(function(){
                           envias+=$(this).attr('name')+"="+$(this).val()+"&"; 
                           $(this).val(''); 
                         });

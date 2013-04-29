@@ -1,4 +1,5 @@
 <?php session_start();
+include ("includes/conectar.php");
     $readonly="";
     if ($_REQUEST['sc']==1){
         $readonly="readonly";
@@ -23,24 +24,18 @@
 <script type='text/javascript' src='js/funcionesvarias.js'></script>
 <script src="js/jquery.uniform.js" type="text/javascript"></script>
 <link rel="stylesheet" href="css/uniform.default.css" type="text/css" media="screen" charset="utf-8" />
+<script type='text/javascript' src='js/jquery.dataTables.js'></script>
+
+<script type='text/javascript' src='js/jqueryEspanol.js'></script>
+<style type="text/css" title="currentStyle">
+			@import "css/jquery.dataTables_themeroller.css";
+
+		</style>
 <script>
 $(document).ready(function(){
-    <?
-    if($_GET['doc']!='resguardo'){
-        ?>
-        $("input,textarea").uniform();
-        <?
-    }else{
-        ?>
-        $("input[type!='file']&&[type!='submit'],textarea").uniform();
-        
-        <?
-    }
-    ?>
- 
-/*$(":input").blur(function(){
-  $(this).val($(this).val().toUpperCase()); 
-});  */
+ $("input[type='text'], input[type='password'], input[type='checkbox'], input[type='radio'], input[type='file'], textarea").uniform(); 
+ $("input[type='submit'], input[type='button'], input[type='reset']").button();
+
 });
 
 </script>
@@ -49,13 +44,12 @@ $(document).ready(function(){
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
 	<tr>
 		<td valign="top" height="56px">
-        	<table  width="100%" height="89" border="0" cellpadding="0" cellspacing="0">
+        	<table style="background: url(images/backrepeat.jpg) repeat-x;"  width="100%" height="89" border="0" cellpadding="0" cellspacing="0">
         		<tr>
-            		<td align="left" bgcolor="ffffff">
-            		<img src="images/logo.png" />
-        		  </td>
+            		<td align="left" ><img src="images/logo.png" /></td>
+                    <td align="right" style="padding-right: 10px;"><h2 style="text-align: center;"><img align="right" src="images/nombre.png" /></h2></td>
         		</tr>
-        		<tr><td bgcolor="#DE2823" height="5px" width="100%" colspan="2">	</td></tr>
+        		<tr><td bgcolor="<?=$colorLineaInf?>" height="5px" width="100%" colspan="2">	</td></tr>
             </table>
 		</td>
 	</tr>
@@ -146,11 +140,11 @@ $(document).ready(function(){
             <td colspan="2" height="50" align="center" id="botoncambiarclave">
               <font face="Arial" color="black" size="2" >
               <?php if ($_REQUEST['sc']==1){?>
-                        <input id="button" class="ui-state-default ui-corner-all" name="submit" type="button" onclick="validar_clavesiguales()" value="  Cambiar  " class="botones" />
+                        <input id="button" class="ui-state-default ui-corner-all" name="submit" type="button" onclick="validar_clavesiguales()" value="Cambiar" class="botones" />
               <?php }else{?>
-                        <input id="button" class="ui-state-default ui-corner-all" name="submit" type="button" onclick="valido_usuario_recuperarclave('')" value="  Verificar  " class="botones" />&nbsp;
+                        <input id="button" class="ui-state-default ui-corner-all" name="submit" type="button" onclick="valido_usuario_recuperarclave('')" value="Verificar" class="botones" />&nbsp;
               <?php }?> 
-              <input onclick="window.location.href='index.php?doc=principal'" id="cancelar" class="ui-state-default ui-corner-all" name="cancela" type="button" onclick="" value="  CANCELAR  " class="botones" /> 
+              <input onclick="window.location.href='index.php?doc=principal'" id="cancelar" class="ui-state-default ui-corner-all" name="cancela" type="button" onclick="" value="Cancelar" class="botones" /> 
               </font>
             </td>
           </tr>

@@ -35,7 +35,7 @@
         <td><strong>Desde:</strong></td><td><input class="datepicker" name="ordenDesde" size="10" id="ordenDesde" type="text" value="<?php echo $_POST['ordenDesde'];?>"/></td>
         <td><strong>Hasta:</strong></td><td><input class="datepicker" name="ordenHasta" size="10" id="ordenHasta" type="text" value="<?php echo $_POST['ordenHasta'];?>"/></td>
         <td>
-            <input type="submit" name="buscar" id="buscar" value="buscar"/>
+            <input type="submit" name="buscar" id="buscar" value="Buscar"/>
             <?php
             if(isset($_POST['ordenDesde']) && $TOTALregistro>0){?>
                 <input type="button" name="eliminar" id="eliminar" value="Eliminar" onclick="validar_fechas('eliminar')" />
@@ -169,7 +169,7 @@ echo "<tbody>";
          }
          
          function verificar_eliminarfechas(){
-             $('#errorvalida').html('<p>¿Esta seguro de eliminar todas las cotizaciones en ese rango de fechas?</p>');
+             $('#errorvalida').html('<p>ï¿½Esta seguro de eliminar todas las cotizaciones en ese rango de fechas?</p>');
         		$("#errorvalida").dialog({
         			resizable:false,
         			bgiframe: true,
@@ -202,7 +202,7 @@ echo "<tbody>";
 				  },*/
 			   data: "op=28&ordenDesde="+desde+"&ordenHasta="+hasta+"",
 			   complete: function(datos){
-			     alert(datos.responseText);
+			     
                     if(datos.responseText=="1"){
                         $('#errorvalida').html('<p>Las Cotizaciones han sido eliminadas</p>');
                 		$("#errorvalida").dialog({
@@ -213,6 +213,7 @@ echo "<tbody>";
                 			buttons: {
                                 Ok: function() {
                                     $(this).dialog('close');
+                                    window.location.href='index.php?doc=cotizaciones';
                 				}                                                                       
                 			}
                 		});

@@ -180,11 +180,11 @@ switch ($_POST['accion']){
         list($montoTotal,$montoDiario,$noches,$limpieza)=explode("|@|",calculaCosto($_POST['id_Propiedad'],2));
         mysql_query("insert into cotizaciones (codigo,id_cliente,fecha_in,fecha_out,monto_diario,monto_total,limpieza,adultos,fecha_registro,st,ninos,nombre,apellido,email,telefono,id_propiedad,noches) 
         values ('".$codigo."','".$id_cliente."','".fechasql($_SESSION['llegada'])."','".fechasql($_SESSION['salida'])."','".$montoDiario."','".$montoTotal."','".$limpieza."','".$_SESSION['adultos']."','".date("Y-m-d H:i:s")."',0,'".$_SESSION['ninos']."','".$_POST['nombre']."','".$_POST['apellido']."','".$_POST['email']."','".$_POST['telefono']."','".$_POST['id_Propiedad']."','".$noches."')");
-        //unset($_SESSION['cotiza']);
-        //unset($_SESSION['llegada']);
-        //unset($_SESSION['salida']);
-        //unset($_SESSION['adultos']);
-        //unset($_SESSION['ninos']);
+        unset($_SESSION['cotiza']);
+        unset($_SESSION['llegada']);
+        unset($_SESSION['salida']);
+        unset($_SESSION['adultos']);
+        unset($_SESSION['ninos']);
         $id_cotizcacion=mysql_insert_id();
 		
         include("cotizacion_pdf.php");
