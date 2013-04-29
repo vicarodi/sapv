@@ -103,23 +103,5 @@
 }elseif($_POST['op']==27){
 	$select=mysql_query("update propiedad_imagenes set imagen_principal='1' where id='".$_REQUEST['id']."'");
 	$select2=mysql_query("update propiedad_imagenes set imagen_principal='0' where id_propiedad='".$_REQUEST['id_propiedad']."' and id<>'".$_REQUEST['id']."'");
-}elseif($_POST['op']==28){
-    
-     if($_POST['ordenDesde']!="" && $_POST['ordenHasta']==""){
-        $where="where DATE_FORMAT(fecha_registro,'%Y-%m-%d') >= '".fechasql($_POST['ordenDesde'])."'";
-    }
-    if($_POST['ordenDesde']=="" && $_POST['ordenHasta']!=""){
-         $where="where DATE_FORMAT(fecha_registro,'%Y-%m-%d') <= '".fechasql($_POST['ordenHasta'])."'";
-    }
-    
-     if($_POST['ordenDesde']!='' && $_POST['ordenHasta']!=''){
-       //$where_aux[]="DATE_FORMAT(fecha_reclamo,'%d/%m/%Y') BETWEEN '".$_POST['ordenDesde']."' and '".$_POST['ordenHasta']."'"; 
-		$where="where DATE_FORMAT(fecha_registro,'%Y-%m-%d') BETWEEN '".fechasql($_POST['ordenDesde'])."' and '".fechasql($_POST['ordenHasta'])."'";
-      
-    }
-    
-    mysql_query("delete from cotizaciones ".$where."");
-    echo 1;
 }
-
 ?>

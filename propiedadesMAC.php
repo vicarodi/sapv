@@ -10,12 +10,12 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
     if($_SESSION['cotiza'][$_GET['id']]==1){
         ?>
         <div>
-        <table width="100%" style="font-family: Arial;font-size: 14px;">
+        <table width="100%" style="font-family: Arial;font-size: 12px;">
         <tr>
             <td align="right"><strong>PROPIEDAD DISPONIBLE</strong><br />del <?=$_SESSION['llegada']?> al <?=$_SESSION['salida']?>, <?=$_SESSION['adultos']?> Adultos, <?=$_SESSION['ninos']?> Ni&ntilde;os</td>
             </tr>
             <tr>
-            <td align="right"><a href="order_confirmation.php?id=<?=$_GET['id']?>"><input type="button" value="Cotizar" /></a></td>
+            <td align="right"><a href="order_confirmation.php?id=<?=$_GET['id']?>">Cotizar</a></td>
             </tr>
         </table>
         </div>
@@ -25,7 +25,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
     <table width="100%" border="0" style="font-family: Arial;font-size: 12px;">
         <tr>
             <td style="margin: 0px;padding: 0px;">
-             <div style="margin-top: 10px; text-align: right">
+             <div style="position: absolute; margin-top: 10px; margin-left: 530px; width: 300px;">
                 <table width="100%" style="font-family: Arial;font-size: 12px;">
                     <tr>
                         <td align="right"><strong><?=$rowPropiedad['tipoProp']?></strong><br />
@@ -57,7 +57,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
             <td colspan="3">
                 <table width="100%" style="font-family: Arial;font-size: 12px;">
                     <tr>
-                        <td align="center" colspan="2" bgcolor="#CCCCCC"><strong>Especificaciones de la Propiedad</strong></td>
+                        <td align="center" colspan="2"><strong>Especificaciones de la Propiedad</strong></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -65,7 +65,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                 <tr>
                                     <td><b>Capacidad: </b><?php echo $rowPropiedad['capacidad'];?></td>
                                     <td><b>Habitaciones: </b><?php echo $rowPropiedad['habitaciones'];?></td>
-                                    <td><b>Ba&Ntilde;os: </b><?php echo $rowPropiedad['banos'];?></td>
+                                    <td><b>Baños: </b><?php echo $rowPropiedad['banos'];?></td>
                                     
                                 </tr>
                                 <tr>
@@ -207,12 +207,8 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                          margin:0px 5px 0px 5px;
                          padding: 5px;
                     }
-                    ul.thumbs li img{
-                       margin-left:5px;
-                       margin-bottom:5px
-                    }
                     ul.thumbs{
-                        margin:95px 5px 0px 5px;
+                        margin:130px 5px 0px 5px;
                         padding: 5px;
                     }
                     </style>
@@ -221,9 +217,9 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                             $('#slides1').bxGallery({
                                maxheight :300,
                                 maxwidth :400,
-                                thumbwidth: 100,
+                                thumbwidth: 80,
                                 thumbplacement: 'right',
-                                thumbcontainer: 500,
+                                thumbcontainer: 400,
                                 thumbcrop:true, 
                                 load_image: 'includes/javascript/bxGallery/spinner.gif'
                             });

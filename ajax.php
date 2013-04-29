@@ -1,7 +1,29 @@
 <? session_start();
-
 include ("conectar.php");
 require_once("sapv/includes/funciones.php");
+function enviaMail($mensaje,$email,$ruta,$from){
+	include("phpmailer/class.phpmailer.php");
+	$mail= new PHPMailer(); // defaults to using php "mail()"
+	//$mail->IsSMTP(); // telling the class to use SMTP
+	$body= $mensaje;
+	$mail->AddReplyTo($from,"");  
+	$mail->SetFrom($from,"Renting Florida");
+	if($from!=""){
+		$mail->Addcc($from, "");
+	}
+	$address = $email;
+	$mail->AddAddress($address, "");
+	$mail->Subject    = $asuntos;
+	$mail->MsgHTML($body);
+	if($ruta!=''){
+		$mail->AddAttachment($ruta);     
+	}	
+	if($mail->Send()){
+		echo "se envio";
+	}else{
+		echo $mail->ErrorInfo;
+	}
+}
 switch ($_POST['accion']){
     case "buscaDisp":
         
@@ -153,15 +175,21 @@ switch ($_POST['accion']){
             $id_cliente=mysql_insert_id();
         }
         $fetchIds=mysql_num_rows(mysql_query("select * from cotizaciones where DATE_FORMAT(fecha_registro,'%Y-%m-%d') = '".date("Y-m-d")."'"));
+        //echo $fetchIds;
         $codigo=date("dmY")."-".($fetchIds+1);
         list($montoTotal,$montoDiario,$noches,$limpieza)=explode("|@|",calculaCosto($_POST['id_Propiedad'],2));
         mysql_query("insert into cotizaciones (codigo,id_cliente,fecha_in,fecha_out,monto_diario,monto_total,limpieza,adultos,fecha_registro,st,ninos,nombre,apellido,email,telefono,id_propiedad,noches) 
         values ('".$codigo."','".$id_cliente."','".fechasql($_SESSION['llegada'])."','".fechasql($_SESSION['salida'])."','".$montoDiario."','".$montoTotal."','".$limpieza."','".$_SESSION['adultos']."','".date("Y-m-d H:i:s")."',0,'".$_SESSION['ninos']."','".$_POST['nombre']."','".$_POST['apellido']."','".$_POST['email']."','".$_POST['telefono']."','".$_POST['id_Propiedad']."','".$noches."')");
-        unset($_SESSION['cotiza']);
-        unset($_SESSION['llegada']);
-        unset($_SESSION['salida']);
-        unset($_SESSION['adultos']);
-        unset($_SESSION['ninos']);
+        //unset($_SESSION['cotiza']);
+        //unset($_SESSION['llegada']);
+        //unset($_SESSION['salida']);
+        //unset($_SESSION['adultos']);
+        //unset($_SESSION['ninos']);
+        $id_cotizcacion=mysql_insert_id();
+		
+        include("cotizacion_pdf.php");
+		enviaMail("este es el mensaje","vicarodi@gmail.com","cotizaciones/".$queryCotizacion['codigo'].".pdf","vicarodi@hotmail.com");
+        
     break;
 }
 ?>

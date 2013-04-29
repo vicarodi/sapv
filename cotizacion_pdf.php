@@ -1,7 +1,7 @@
 <?php
-ini_set('memory_limit', '512M'); 
-set_time_limit(0);
-include ("includes/conectar.php");
+//ini_set('memory_limit', '512M');
+//set_time_limit(0);
+//include ("includes/conectar.php");
 require_once('includes/config/lang/eng.php');
 require_once('includes/tcpdf.php');
 $queryCOnfig=mysql_query("select * from configuracion");
@@ -41,9 +41,10 @@ function devuelveFechasPago($fechaDelVIaje){
 	$otraFecha=date("d/m/Y",$timestamp2);
 	return $nombreDia."|@|".$otraFecha;
 }
-
+//$_GET['id']=1;
+$_GET['id']=$id_cotizcacion;
 $queryCotizacion=mysql_fetch_assoc(mysql_query("select * from cotizaciones where id='".$_GET['id']."'"));
-$setPropiedades=mysql_query("SELECT propiedades.id as idPropiedad,propiedades.*, tipo_propiedad.nombre as tipoProp FROM tipo_propiedad inner join propiedades on tipo_propiedad.id=id_tipo_propiedad where propiedades.id='".$_GET['id']."'");
+$setPropiedades=mysql_query("SELECT propiedades.id as idPropiedad,propiedades.*, tipo_propiedad.nombre as tipoProp FROM tipo_propiedad inner join propiedades on tipo_propiedad.id=id_tipo_propiedad where propiedades.id='".$queryCotizacion['id_propiedad']."'");
 $registroPropiedades=mysql_fetch_assoc($setPropiedades);
 
 class MYPDF extends TCPDF {
@@ -224,7 +225,7 @@ $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <b>QUE LE OFRECEMOS:</b><br />
   - '.$registroPropiedades['tipoProp'].' con capacidad de '.$registroPropiedades['capacidad'].' personas <br />
   - '.$registroPropiedades['habitaciones'].' dormitorios; lenceria incluida<br />';
- $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$_GET['id']."'");
+ $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$queryCotizacion['id_propiedad']."'");
  while($rowServicio=mysql_fetch_assoc($serviciosUsados)){      
    $tableContenido.=' - '.$rowServicio['nombre'].' <br />';
  }
@@ -254,10 +255,10 @@ EOD;
 $pdf->writeHTML($tbl, true, 0, true, 0);
 $pdf->AddPage();
 $tableContenido='<table><tr>
-    <td align="center"><img '.devuelveRutadim('images/propiedades/'.$registroPropiedades['mapa_general'],350,350).' /></td>
+    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350).' /></td>
   </tr>
   <tr>
-    <td align="center" ><img '.devuelveRutadim('images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350).' /></td>
+    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350).' /></td>
   </tr></table>';
  
   $tbg = <<<EOD
@@ -269,13 +270,13 @@ $pdf->writeHTML($tbg, true, 0, true, 0);
   <tr>
   <td>
   <table border="0">';
-  $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_GET['id']."'");
+  $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$queryCotizacion['id_propiedad']."'");
          $numeroImagenes=mysql_num_rows($queryImagenes);
          $v=0;
 		 $h=0;
          while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){ 
         	
-			$tamanini=getimagesize('images/propiedades/'.$rowIMagenes['ruta_imagen']);
+			$tamanini=getimagesize('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen']);
 			$arregloImagenes[($tamanini[0]-$tamanini[1]).$rowIMagenes['id']]=$rowIMagenes['ruta_imagen'];
 			//echo $imgAncho." ".$imgAlto." ".$alto." ".$ancho."<br />";
          }
@@ -293,8 +294,8 @@ $pdf->writeHTML($tbg, true, 0, true, 0);
 			$tableContenido.='<td colspan="2"></td>';
 			$tableContenido.='</tr>';
          	$tableContenido.='<tr>';
-			$tableContenido.='<td><img '.devuelveRutadim('images/propiedades/'.$otroArreglo[$h],260,260).' /></td>';
-			$tableContenido.='<td><img '.devuelveRutadim('images/propiedades/'.$otroArreglo[($h+1)],260,260).' /></td>';
+			$tableContenido.='<td><img '.devuelveRutadim('sapv/images/propiedades/'.$otroArreglo[$h],260,260).' /></td>';
+			$tableContenido.='<td><img '.devuelveRutadim('sapv/images/propiedades/'.$otroArreglo[($h+1)],260,260).' /></td>';
 			$tableContenido.='</tr>';
 			
          }
@@ -310,7 +311,8 @@ $tbv = <<<EOD
 $tableContenido
 EOD;
 $pdf->writeHTML($tbv, true, 0, true, 0);
-$pdf->Output('COTIZACION'.$codigo.'.pdf', 'I');
+$pdf->Output("cotizaciones/".$queryCotizacion['codigo'].'.pdf', 'F');
+
 //============================================================+
 // END OF FILE
 //============================================================+
