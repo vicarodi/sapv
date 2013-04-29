@@ -363,7 +363,7 @@ switch ($_GET['accion']){
         <td><input type="text" name="coordenadas" value="<?=$row_medico['gps']?>" title="Coordenadas GPS"/></td>
     </tr>
     <tr>
-        <td><strong>Km2 Construcci&oacute;n:</strong></td>
+        <td><strong>Metros Cuadrados:</strong></td>
         <td><input type="text" name="km_const" id="km_const" value="<?=$row_medico['km_const']?>" title="Km2 Construcci&oacute;n"/></td>
     </tr>
 	    <tr>

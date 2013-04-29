@@ -41,7 +41,7 @@ function devuelveFechasPago($fechaDelVIaje){
 	$otraFecha=date("d/m/Y",$timestamp2);
 	return $nombreDia."|@|".$otraFecha;
 }
-//$_GET['id']=1;
+
 $_GET['id']=$id_cotizcacion;
 $queryCotizacion=mysql_fetch_assoc(mysql_query("select * from cotizaciones where id='".$_GET['id']."'"));
 $setPropiedades=mysql_query("SELECT propiedades.id as idPropiedad,propiedades.*, tipo_propiedad.nombre as tipoProp FROM tipo_propiedad inner join propiedades on tipo_propiedad.id=id_tipo_propiedad where propiedades.id='".$queryCotizacion['id_propiedad']."'");
@@ -117,10 +117,12 @@ $pdf->SetFont('helvetica', '', 10);
 // add a page
 $pdf->setPageFormat( 'LETTER','P');
 $pdf->AddPage();
-$noches=diasDiferencia($queryCotizacion['fecha_in'],$queryCotizacion['fecha_out']);
+$noches=diasDiferencia($queryCotizacion['fecha_in'],$queryCotizacion['fecha_out'])+1;
 $limpiezaTotal=$queryCotizacion['limpieza'];
+
+
 if($noches>=15){
- $resto=$noches%15;
+ $resto=round($noches/15);
  $limpiezaTotal=$queryCotizacion['limpieza']*$resto;
 }
 // -----------------------------------------------------------------------------
@@ -130,7 +132,7 @@ list($cincuenta,$totalMon)=explode("|@|",devuelveFechasPago($queryCotizacion['fe
 $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
 
   <tr>
-    <td><p>Estimado(a) '.$queryCotizacion['nombre'].' '.$queryCotizacion['apellido'].',<br />
+    <td><p>Estimado(a) '.$queryCotizacion['nombre'].' '.$queryCotizacion['apellido'].',<br /><br />
 Muchas gracias por su contacto.<br /> 
 Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
 </p></td>
@@ -148,8 +150,8 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
       </tr>
       <tr>
         <td width="60%" height="15px">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
-        <td width="20%" align="right">$ '.$queryCotizacion['monto_diario'].'&nbsp;</td>
-        <td width="20%" align="right">$ '.($queryCotizacion['monto_diario']*$noches).'&nbsp;</td>
+        <td width="20%" align="right">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
+        <td width="20%" align="right">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
       </tr>
       <tr style="background-color:#fbfbfb">
         <td width="60%" height="15px">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
@@ -162,7 +164,7 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
         <td width="20%" align="right">$ '.DEPOSITO.'&nbsp;</td>
       </tr>
       <tr>
-        <td align="right" width="60%" style="color:#AFAFAF;font-size:20px"><br />El precio en Bs. puede calcularlo multiplicando el total que le damos en esta cotizaci&oacute;n por la tasa de Bs. 26 por dolar</td>
+        <td align="right" width="60%" style="color:#AFAFAF;font-size:20px"><br /></td>
         <td align="right" width="20%" style="line-heigth:5px"><br /><strong>TOTAL</strong></td>
         <td width="20%" align="right" style="line-heigth:5px">$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
       </tr>
@@ -170,13 +172,26 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
   </tr>
   <tr>
     <td>&nbsp;</td>
-  </tr>
-  <tr>
+  </tr>';
+  $fechaHoy=date("Y-m-d");
+  $nochesPagos=diasDiferencia($fechaHoy,$queryCotizacion['fecha_in'])+1;
+  if($nochesPagos<30){
+  	$tableContenido.='  <tr>
     <td><p>Para reservar su fecha solo debe depositar:<br />
-  <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)/2),2,",",".").'</b> antes del '.$cincuenta.'.<br />
-  <b>$ '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+DEPOSITO+$limpiezaTotal),2,",",".").'</b> antes del '.$totalMon.'<br />
+  <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)),2,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format((($queryCotizacion['monto_diario']*$noches))*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
+  
 Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.DEPOSITO.'$) en Bol&iacute;vares.<br />
-<br /><br />
+<br /><br />';
+  }else{
+  	$tableContenido.='  <tr>
+    <td><p>Para reservar su fecha solo debe depositar:<br />
+  <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)/2),2,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format((($queryCotizacion['monto_diario']*$noches)/2)*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
+  <b>$ '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+DEPOSITO+$limpiezaTotal),2,",",".").'</b> antes del '.$totalMon.' o <b>Bs. '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+DEPOSITO+$limpiezaTotal)*(int)CAMBIO_DOLAR,2,",",".").'</b><br />
+Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.DEPOSITO.'$) en Bol&iacute;vares.<br />
+<br /><br />';
+  }
+
+$tableContenido.=' 
 Se aceptan cupos de internet con un recargo del 15%. (Paypal)<br />
 Recuerde que los pagos en Bs. son calculados a la tasa del d&iacute;a por lo que el saldo restante ir&aacute; disminuyendo o aumentando de acuerdo a la tasa.
 </p><p style="text-align:center;font-size:32px;">

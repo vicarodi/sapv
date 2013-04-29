@@ -31,7 +31,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                         <td align="right"><strong><?=$rowPropiedad['tipoProp']?></strong><br />
                         <b>Direcci&oacute;n:</b> <?=$rowPropiedad['direccion']?>, <?=$rowPropiedad['ciudad']?>, <?=$rowPropiedad['estado']?>, <?=$rowPropiedad['codigo_postal']?><br/>
                         <?php if($rowPropiedad['km_const']==""){ $km_const=0;}else{$km_const=$rowPropiedad['km_const'];}?>
-                        <?php echo $km_const;?> km2 de construcci&oacute;n.
+                        <?php echo $km_const;?> m2 de construcci&oacute;n.
                         </td>
                         
                         </tr>

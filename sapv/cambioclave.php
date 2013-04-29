@@ -23,7 +23,7 @@ if(isset($_GET['accion'])){
  
  }
 ?>
-<fieldset style="width:70%"> <legend style="font-weight:bold;text-align:left; font-family:Tahoma; font-size:14px">Cambio de Clave</legend>
+<?titulosPag("CONFIGURACION")?>
 <form name="form1" id="formulario" method="post" action="index2.php?doc=cambioclave&accion=<?=$accion?>" onsubmit="return validarContrasena()">
 <input type="hidden" name="id" value="<?=$_GET['id']?>">
 <table class="general">

@@ -60,7 +60,8 @@ switch ($_GET['accion']){
 	</tr>
 	<tr>
 		<td><b>Valor:</b></td>
-		<td><input type="text" title="Valor" name="valor" id="valor" size="15" value="<?=$row_medico['valor']?>"></td>
+		<td>
+        <textarea title="Valor" name="valor" id="valor" cols="60" rows="9"><?=$row_medico['valor']?></textarea></td>
 	</tr>
 
 

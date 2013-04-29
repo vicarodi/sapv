@@ -66,7 +66,7 @@ function dialogos($tipo){
 		 </div>';
 	}elseif ($tipo==4){
 		echo '<div id="dialog" title="Registro no cincide">
-			<p>La contraseña actual es incorrecta.</p>
+			<p>La contraseï¿½a actual es incorrecta.</p>
 		 </div>';
 		}
 }
@@ -137,7 +137,7 @@ function edad($edad){
 function calc_edad($fecha_nac){ 
 	//Esta funcion toma una fecha de nacimiento  
 	//desde una base de datos mysql 
-	//en formato aaaa/mm/dd y calcula la edad en números enteros 
+	//en formato aaaa/mm/dd y calcula la edad en nï¿½meros enteros 
 	
 	$dia=date("j"); 
 	$mes=date("n"); 
@@ -202,13 +202,13 @@ function diasDiferencia($fechaDesde,$fhcaHasta){
     $segundos_diferencia = $timestamp1 - $timestamp2;
     //echo $segundos_diferencia;
     
-    //convierto segundos en días
+    //convierto segundos en dï¿½as
     $dias_diferencia = $segundos_diferencia / (60 * 60 * 24);
     
-    //obtengo el valor absoulto de los días (quito el posible signo negativo)
+    //obtengo el valor absoulto de los dï¿½as (quito el posible signo negativo)
     $dias_diferencia = abs($dias_diferencia);
     
-    //quito los decimales a los días de diferencia
+    //quito los decimales a los dï¿½as de diferencia
     $dias_diferencia = floor($dias_diferencia);
     
     return $dias_diferencia;  
@@ -311,22 +311,26 @@ function calculaCosto($id_propiedad,$devuelve=1){
      $arreglosDatos[$rowTarifas['id']]['limpieza']=$rowTarifas['limpieza'];
     
  }
-    $diasTour=diasDiferencia(fechasql($_SESSION['llegada']),fechasql($_SESSION['salida']));
+    $diasTour=diasDiferencia(fechasql($_SESSION['llegada']),fechasql($_SESSION['salida']))+1;
      $fechaInicio=strtotime(fechasql($_SESSION['llegada']));
      $fechaFin=strtotime(fechasql($_SESSION['salida']));
+     $monto=0;
 // si hay menos de 30 dias calculo en base al precio diario
     if($diasTour<30){
+    	
      $monto=0;
      // recorro cada tarifa dentro de la cual esta el tour
      for($ij=$fechaInicio; $ij<=$fechaFin; $ij+=86400){
         $inicio= date("Y-m-d", $ij);
         for($h=0;$h<count($arreglosIds);$h++){
           if(in_array($inicio,$arregloRango[$arreglosIds[$h]])){
-            $monto+=$arreglosDatos[$arreglosIds[$h]]['precio_diario'];
+          	//echo $arreglosDatos[$arreglosIds[$h]]['precio_diario']."<br />";
+            $monto+=(float)$arreglosDatos[$arreglosIds[$h]]['precio_diario'];
              $limpieza=$arreglosDatos[$arreglosIds[$h]]['limpieza'];
             break;
           }   
-        }   
+        } 
+		//echo $monto."<br />";  
      }   
      
     }else{
@@ -336,12 +340,16 @@ function calculaCosto($id_propiedad,$devuelve=1){
        if($diasTour==30){
         $monto=$rowMensual['precio_mensual'];
        }elseif($diasTour>30 && $diasTour<60){// si hay mas de 30 dias y menos de 60  calculo en base al precio mensual y precio diario
+        //echo "ente bien";
+        $valoristo=(60-$diasTour)+1;
+		
         $monto=$rowMensual['precio_mensual'];
+        $fechaInicio=strtotime(fechasql($_SESSION['llegada']))+(86400*$valoristo);
         for($ij=$fechaInicio; $ij<=$fechaFin; $ij+=86400){
         $inicio= date("Y-m-d", $ij);
         for($h=0;$h<count($arreglosIds);$h++){
               if(in_array($inicio,$arregloRango[$arreglosIds[$h]])){
-                $monto+=$arreglosDatos[$arreglosIds[$h]]['precio_diario'];
+                $monto+=(float)$arreglosDatos[$arreglosIds[$h]]['precio_diario'];
                 break;
               }   
             }   
@@ -361,6 +369,9 @@ function calculaCosto($id_propiedad,$devuelve=1){
         $limpieza=$rowMensual['limpieza'];
        }
      if($devuelve==1){
+     //	echo $monto." ".$diasTour."<br />";	
+     	//echo round($monto/$diasTour);
+		
       echo "<strong style='font-size:14px'><br>Precio Por Noche <br>$ ".round($monto/$diasTour)."</strong>";  
      }else{
         return $monto."|@|".round($monto/$diasTour)."|@|".$diasTour."|@|".$limpieza;

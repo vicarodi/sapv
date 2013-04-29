@@ -1,7 +1,7 @@
 <? session_start();
 include ("conectar.php");
 require_once("sapv/includes/funciones.php");
-function enviaMail($mensaje,$email,$ruta,$from){
+function enviaMail($mensaje,$email,$ruta,$from,$asuntos){
 	include("phpmailer/class.phpmailer.php");
 	$mail= new PHPMailer(); // defaults to using php "mail()"
 	//$mail->IsSMTP(); // telling the class to use SMTP
@@ -66,7 +66,7 @@ switch ($_POST['accion']){
                         }else{
                             $km_const=$registro['km_const'];
                         }
-                            echo "<strong>".$registro['tipoProp']."</strong> ".$km_const." km2<br>";
+                            echo "<strong>".$registro['tipoProp']."</strong> ".$km_const." m2<br>";
                             echo $registro['capacidad']." Personas<br>";
                             echo "Ubic ".$registro['ciudad'].", ".$registro['estado']."<br>";
                         ?>
@@ -186,9 +186,12 @@ switch ($_POST['accion']){
         unset($_SESSION['adultos']);
         unset($_SESSION['ninos']);
         $id_cotizcacion=mysql_insert_id();
-		
+		$mensaje="Estimado (a) ".$_POST['nombre']." ".$_POST['apellido']."<br />
+        Muchas gracias por habernos contactado.<br />
+        Le adjunto la cotizaci&oacute;n que solicit&oacute; a trav&eacute;s de nuestra p&aacute;gina web<br /> No dude en contactarnos por esta v&iacute;a o por tel&eacute;fono si tiene alguna pregunta
+        ";
         include("cotizacion_pdf.php");
-		enviaMail("este es el mensaje","vicarodi@gmail.com","cotizaciones/".$queryCotizacion['codigo'].".pdf","vicarodi@hotmail.com");
+		enviaMail($mensaje,$_POST['email'],"cotizaciones/".$queryCotizacion['codigo'].".pdf","vicarodi@hotmail.com","Renting Florida - Cotizacion ".$queryCotizacion['codigo']);
         
     break;
 }

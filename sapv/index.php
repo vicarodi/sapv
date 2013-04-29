@@ -61,7 +61,7 @@ $(document).ready(function(){
 				<tr>
 					<td>
 					<ul id='nav'>
-                    <li><a href='index.php?doc=principal'>Principal</a></li>
+                    <li><a href='index.php?doc=propiedades'>Principal</a></li>
 					   <?
 					   $seelct=mysql_query("select * from menu where padre=0 and id in (Select id_menu from grupos_menu where id_grupo = '".$_SESSION['usuario_nivel']."')");
 						while($row=mysql_fetch_assoc($seelct)){
