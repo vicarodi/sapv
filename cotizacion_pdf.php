@@ -142,31 +142,31 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><table cellspacing="0" cellpadding="0" style="line-height:8px;" border="1">
-      <tr style="background-color:#ccc">
-        <td align="center"  width="60%" height="15px" style="line-height:5px"><strong>DESCRIPCI&Oacute;N</strong></td>
-        <td align="center" width="20%" style="line-height:5px">&nbsp;<strong>PRECIO POR NOCHE</strong></td>
-        <td align="center" width="20%" style="line-height:5px">&nbsp;<strong>TOTAL</strong></td>
+    <td><table cellspacing="0" cellpadding="0" style="line-height:8px;border:1px solid #e1e1e1">
+      <tr style="background-color:#ccc;border:1px solid #ccc">
+        <td align="center"  width="60%" height="15px" style="line-height:5px;border:1px solid #e1e1e1"><strong>DESCRIPCI&Oacute;N</strong></td>
+        <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>PRECIO POR NOCHE</strong></td>
+        <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>TOTAL</strong></td>
       </tr>
-      <tr>
-        <td width="60%" height="15px">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
-        <td width="20%" align="right">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
-        <td width="20%" align="right">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
+      <tr style="border:1px solid #e1e1e1">
+        <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
       </tr>
-      <tr style="background-color:#fbfbfb">
-        <td width="60%" height="15px">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
-        <td width="20%" align="right">$ '.$queryCotizacion['limpieza'].'&nbsp;</td>
-        <td width="20%" align="right">$ '.$limpiezaTotal.'&nbsp;</td>
+      <tr style="background-color:#fbfbfb;border:1px solid #e1e1e1">
+        <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['limpieza'].'&nbsp;</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$limpiezaTotal.'&nbsp;</td>
       </tr>
-      <tr>
-      <td width="60%" height="15px">&nbsp;Dep&oacute;sito de Seguridad (devuelto 48 horas despu&eacute;s de su check-out)</td>
-        <td width="20%" align="right">$ '.DEPOSITO.'&nbsp;</td>
-        <td width="20%" align="right">$ '.DEPOSITO.'&nbsp;</td>
+      <tr style="border:1px solid #e1e1e1">
+      <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Dep&oacute;sito de Seguridad (devuelto 48 horas despu&eacute;s de su check-out)</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.DEPOSITO.'&nbsp;</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.DEPOSITO.'&nbsp;</td>
       </tr>
-      <tr>
-        <td align="right" width="60%" style="color:#AFAFAF;font-size:20px"><br /></td>
-        <td align="right" width="20%" style="line-heigth:5px"><br /><strong>TOTAL</strong></td>
-        <td width="20%" align="right" style="line-heigth:5px">$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
+      <tr style="border:1px solid #e1e1e1">
+        <td align="right" width="60%" style="color:#AFAFAF;font-size:20px;border:1px solid #e1e1e1"><br /></td>
+        <td align="right" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1"><br /><strong>TOTAL</strong></td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
       </tr>
     </table></td>
   </tr>

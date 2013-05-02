@@ -30,7 +30,7 @@ $registro=mysql_fetch_assoc($setPropiedades);
             }else{
                 $km_const=$registro['km_const'];
             }
-            echo "<strong>Propiedad a Cotizar:<br>".$registro['tipoProp']."</strong> ".$km_const." km2<br>";
+            echo "<strong>Propiedad a Cotizar:<br>".$registro['tipoProp']."</strong> ".$km_const." m2<br>";
             echo $registro['capacidad']." Personas<br>";
             echo "Ubic ".$registro['ciudad'].", ".$registro['estado']."<br>";
             echo calculaCosto($_GET['id']);
@@ -59,6 +59,11 @@ $registro=mysql_fetch_assoc($setPropiedades);
                                 <td><strong>Email:</strong></td>
                                 <td><input type="text" title="Email" name="email" id="email" /></strong></td>
                             </tr>
+                            <tr>
+                            	<td><strong>Confirmaci&oacute;n de Email:</strong></td>
+                            	<td><input type="text" name="confirmacion_email" id="confirmacion_email"  onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false" autocomplete="off"></td>
+                            	
+                            </tr>
                                <tr>
                                 <td><strong>Tel&eacute;fono:</strong></td>
                                 <td><input type="text" title="Tel&eacute;fono" name="telefono" id="telefono" /></strong></td>
@@ -84,23 +89,30 @@ $registro=mysql_fetch_assoc($setPropiedades);
           envias+=$(this).attr('name')+"="+$(this).val()+"&";  
         }
     });
+    
     var email=$("#email").val();
-    if(falta!=""){
-       alert("Los siguientes Campos son obligatorios:\n\n"+falta); 
+    var confirmacion=$("#confirmacion_email").val();
+    if(email!=confirmacion){
+    alert("Los correos electronicos que ingreso no son correctos, por favor verifique la informacion");	
     }else{
-      $.ajax({
-        type: "POST",
-        url: "ajax.php",
-        beforeSend: function(){
-            $("#formularioCotizacion").html('<img src="sapv/images/ajax-loader.gif">');
-        },
-        data: envias+"accion=creaCoti&id_Propiedad=<?=$_GET['id']?>",
-        complete: function(datos){
-            $("#formularioCotizacion").html("<div class='ui-state-highlight ui-corner-all' style='margin-top: 20px; padding: 0px 0.7em;'><p><span class='ui-icon ui-icon-info' style='float: left; margin-right: 0.3em;'></span>Su cotizaci&oacute;n ha sido enviada a "+email+". No dude en contactarnos para hacer la reserva.</div>");
-            
-         }
-      });    
+	    if(falta!=""){
+	       alert("Los siguientes Campos son obligatorios:\n\n"+falta); 
+	    }else{
+	      $.ajax({
+	        type: "POST",
+	        url: "ajax.php",
+	        beforeSend: function(){
+	            $("#formularioCotizacion").html('<img src="sapv/images/ajax-loader.gif">');
+	        },
+	        data: envias+"accion=creaCoti&id_Propiedad=<?=$_GET['id']?>",
+	        complete: function(datos){
+	            $("#formularioCotizacion").html("<div class='ui-state-highlight ui-corner-all' style='margin-top: 20px; padding: 0px 0.7em;'><p><span class='ui-icon ui-icon-info' style='float: left; margin-right: 0.3em;'></span>Su cotizaci&oacute;n ha sido enviada a "+email+". No dude en contactarnos para hacer la reserva.</div>");
+	            
+	         }
+	      });    
+	    }	
     }
+
  
  }
  </script>

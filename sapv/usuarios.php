@@ -58,6 +58,11 @@ switch ($_GET['accion']){
 		<td><b>Grupo de usuario:</b></td>
 		<td><select title="Grupo de Usuario" name="grupo" id="grupo" onchange="carga_doctores(this.value)">
 				<option value="">-----Seleccione-----</option>
+				<?
+				if($row_medico['nivel_acceso']==1){
+					$selected1='selected';
+				}
+				?>
 		      	<option <?=$selected1?> value="1">Administrador</option>
 			</select></td>
 	</tr>
@@ -151,7 +156,7 @@ echo "<tbody>";
 		echo "</table>";?>
 		<!-- dejar como esta -->
 			<div style="display:none" id="dialog2" title="Confirmar">
-				<p>¿Est&aacute; ud seguro de eliminar este registro?</p>
+				<p>ï¿½Est&aacute; ud seguro de eliminar este registro?</p>
 			 </div>
 	
 		<!-- dejar como esta -->
