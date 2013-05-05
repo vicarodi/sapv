@@ -12,8 +12,8 @@ switch ($_GET['accion']){
        $idPropietario= $_POST['id_propietario'];
     }
        
-        mysql_query("Insert into propiedades (id_propietario,id_tipo_propiedad,direccion,ciudad,estado,codigo_postal,id_pais,habitaciones,banos,gps,capacidad,km_const,puestos_est) 
-        values ('".$idPropietario."','".$_POST['id_propiedad']."','".$_POST['direccion']."','".$_POST['ciudad']."','".$_POST['estado']."','".$_POST['codigo_postal']."','".$_POST['pais']."','".$_POST['habitaciones']."','".$_POST['banos']."','".$_POST['coordenadas']."','".$_POST['capacidad']."','".$_POST['km_const']."','".$_POST['puestos_est']."')")or die(mysql_error());
+        mysql_query("Insert into propiedades (id_propietario,id_tipo_propiedad,direccion,ciudad,estado,codigo_postal,id_pais,habitaciones,banos,gps,capacidad,km_const,puestos_est,deposito) 
+        values ('".$idPropietario."','".$_POST['id_propiedad']."','".$_POST['direccion']."','".$_POST['ciudad']."','".$_POST['estado']."','".$_POST['codigo_postal']."','".$_POST['pais']."','".$_POST['habitaciones']."','".$_POST['banos']."','".$_POST['coordenadas']."','".$_POST['capacidad']."','".$_POST['km_const']."','".$_POST['puestos_est']."','".$_POST['deposito']."')")or die(mysql_error());
         $idUltimo=mysql_insert_id();
         
         $mapaGeneral=$_FILES['mapa_general']['tmp_name'];
@@ -118,7 +118,7 @@ switch ($_GET['accion']){
         banos='".$_POST['banos']."',capacidad='".$capacidad."',
         gps='".$_POST['coordenadas']."',
         capacidad='".$_POST['capacidad']."',
-		km_const='".$_POST['km_const']."',puestos_est='".$_POST['puestos_est']."'
+		km_const='".$_POST['km_const']."',puestos_est='".$_POST['puestos_est']."', deposito='".$_POST['deposito']."'
 		where id='".$_POST['id']."'")or die(mysql_error());
 	    mysql_query("delete from propiedad_comision where id_propiedad='".$idUltimo."'");
         $queryUsuarios=mysql_query("select * from user_list where nivel_acceso=1 and ID!=1");
@@ -334,6 +334,14 @@ switch ($_GET['accion']){
         </td>
         <td>
             <input type="text" name="capacidad" id="capacidad" value="<?=$row_medico['capacidad']?>" size="1px" maxlength="2" title="Capacidad"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>Dep&oacute;sito:</strong>
+        </td>
+        <td>
+            <input type="text" name="deposito" id="deposito" value="<?=$row_medico['deposito']?>" title="Deposito"/>
         </td>
     </tr>
      <tr>

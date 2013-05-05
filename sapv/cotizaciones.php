@@ -1,4 +1,11 @@
 <?
+    if($_GET["accion"]=="aprobar"){
+    	mysql_query("update cotizaciones set st=1 where id='".$_GET['id']."'");
+		$queryCoti=mysql_fetch_assoc(mysql_query("Select * from cotizaciones where id='".$_GET['id']."'"));
+		mysql_query("insert into propiedades_disponibilidad (id_propiedad,fecha_inicio,fecha_fin) values ('".$queryCoti['id_propiedad']."','".$queryCoti['fecha_in']."','".$queryCoti['fecha_out']."')");
+    	redireccionador("index.php?doc=cotizaciones");
+    }
+    
     $where_aux= array(); 
 
     if($_POST['ordenDesde']!="" && $_POST['ordenHasta']==""){
@@ -18,7 +25,7 @@
     $where = ($where != "")?" where ".$where:"";
     
     //cambiar el nombre de la tabla por la que te corresponde a ti
-	$sql="SELECT *,DATE_FORMAT(fecha_registro,'%Y-%m-%d') as fechaNueva FROM cotizaciones ".$where."";
+	$sql="SELECT *,DATE_FORMAT(fecha_registro,'%Y-%m-%d') as fechaNueva FROM cotizaciones ".$where." order by st,fecha_in";
     
     //echo $sql; 
 	$res=mysql_query($sql);
@@ -63,7 +70,8 @@
         echo "<th>Llegada</th>";
         echo "<th>Salida</th>";
         echo "<th>Noches</th>";
-		echo "<th>Monto</th></tr></thead>";
+		echo "<th>Monto</th>
+		<th>Acciones</th></tr></thead>";
 //fin del encabezado del listado
 
 
@@ -89,6 +97,21 @@ echo "<tbody>";
 	<td>
     <? echo $registro["monto_diario"]; ?>
 <!--cambiar todo lo que dice index2.php?doc=tipos_camas por el el nombre del archivo que les toco por ejemplo si te toco insumos debes poner index.php?doc=insumos y lo demas queda igual-->
+	</td>
+	<td>
+		<?
+		if($registro["st"]!=1){
+		?>
+		<a href="index2.php?doc=cotizaciones&accion=aprobar&id=<?=$registro["id"]?>"><?botones('aprobar');?></a>
+		<?	
+		}else{
+			?>
+			<b>Aprobada</b>
+			<?
+		}
+		?>
+		
+		
 	</td>
 
   </tr>
@@ -169,7 +192,7 @@ echo "<tbody>";
          }
          
          function verificar_eliminarfechas(){
-             $('#errorvalida').html('<p>�Esta seguro de eliminar todas las cotizaciones en ese rango de fechas?</p>');
+             $('#errorvalida').html('<p>Esta seguro de eliminar todas las cotizaciones en ese rango de fechas?</p>');
         		$("#errorvalida").dialog({
         			resizable:false,
         			bgiframe: true,

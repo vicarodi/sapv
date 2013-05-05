@@ -165,7 +165,18 @@ switch ($_POST['accion']){
             </tr>
         <?
     break;
+
     case "creaCoti":
+		$privatekey = "6LcOzuASAAAAACX4B88Prsu9A2h-grkwDnLBiIwN";
+		$resp = recaptcha_check_answer ($privatekey,
+		                                $_SERVER["REMOTE_ADDR"],
+		$_POST["recaptcha_challenge_field"],
+		$_POST["recaptcha_response_field"]);
+		
+		if (!$resp->is_valid) {
+		echo 0;
+		} else {
+
         $queyCliente=mysql_query("select * from clientes where email='".$_POST['email']."'");
         if(mysql_num_rows($queyCliente)>0){
             $rowCliente=mysql_fetch_assoc($queyCliente); 
@@ -192,7 +203,8 @@ switch ($_POST['accion']){
         ";
         include("cotizacion_pdf.php");
 		enviaMail($mensaje,$_POST['email'],"cotizaciones/".$queryCotizacion['codigo'].".pdf","vicarodi@hotmail.com","Renting Florida - Cotizacion ".$queryCotizacion['codigo']);
-        
+        		    
+		}
     break;
 }
 ?>

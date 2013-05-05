@@ -126,7 +126,7 @@ if($noches>=15){
  $limpiezaTotal=$queryCotizacion['limpieza']*$resto;
 }
 // -----------------------------------------------------------------------------
-$totalApagar=($queryCotizacion['monto_diario']*$noches)+$limpiezaTotal+(int)DEPOSITO;
+$totalApagar=($queryCotizacion['monto_diario']*$noches)+$limpiezaTotal+(int)$registroPropiedades['deposito'];
 list($cincuenta,$totalMon)=explode("|@|",devuelveFechasPago($queryCotizacion['fecha_in']));
 
 $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -142,28 +142,28 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><table cellspacing="0" cellpadding="0" style="line-height:8px;border:1px solid #e1e1e1">
-      <tr style="background-color:#ccc;border:1px solid #ccc">
+    <td><table cellspacing="0" cellpadding="0" style="line-height:8px;">
+      <tr style="background-color:#ccc">
         <td align="center"  width="60%" height="15px" style="line-height:5px;border:1px solid #e1e1e1"><strong>DESCRIPCI&Oacute;N</strong></td>
         <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>PRECIO POR NOCHE</strong></td>
         <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>TOTAL</strong></td>
       </tr>
-      <tr style="border:1px solid #e1e1e1">
+      <tr>
         <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
         <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
         <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
       </tr>
-      <tr style="background-color:#fbfbfb;border:1px solid #e1e1e1">
+      <tr style="background-color:#fbfbfb;">
         <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
         <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['limpieza'].'&nbsp;</td>
         <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$limpiezaTotal.'&nbsp;</td>
       </tr>
-      <tr style="border:1px solid #e1e1e1">
+      <tr>
       <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Dep&oacute;sito de Seguridad (devuelto 48 horas despu&eacute;s de su check-out)</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.DEPOSITO.'&nbsp;</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.DEPOSITO.'&nbsp;</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
+        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
       </tr>
-      <tr style="border:1px solid #e1e1e1">
+      <tr>
         <td align="right" width="60%" style="color:#AFAFAF;font-size:20px;border:1px solid #e1e1e1"><br /></td>
         <td align="right" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1"><br /><strong>TOTAL</strong></td>
         <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
@@ -180,14 +180,14 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
     <td><p>Para reservar su fecha solo debe depositar:<br />
   <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)),2,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format((($queryCotizacion['monto_diario']*$noches))*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
   
-Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.DEPOSITO.'$) en Bol&iacute;vares.<br />
+Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.$registroPropiedades['deposito'].'$) en Bol&iacute;vares.<br />
 <br /><br />';
   }else{
   	$tableContenido.='  <tr>
     <td><p>Para reservar su fecha solo debe depositar:<br />
   <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)/2),2,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format((($queryCotizacion['monto_diario']*$noches)/2)*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
-  <b>$ '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+DEPOSITO+$limpiezaTotal),2,",",".").'</b> antes del '.$totalMon.' o <b>Bs. '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+DEPOSITO+$limpiezaTotal)*(int)CAMBIO_DOLAR,2,",",".").'</b><br />
-Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.DEPOSITO.'$) en Bol&iacute;vares.<br />
+  <b>$ '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+$registroPropiedades['deposito']+$limpiezaTotal),2,",",".").'</b> antes del '.$totalMon.' o <b>Bs. '.number_format(((($queryCotizacion['monto_diario']*$noches)/2)+$registroPropiedades['deposito']+$limpiezaTotal)*(int)CAMBIO_DOLAR,2,",",".").'</b><br />
+Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.$registroPropiedades['deposito'].'$) en Bol&iacute;vares.<br />
 <br /><br />';
   }
 
@@ -238,7 +238,8 @@ $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
     $tableContenido.='<tr>
   <td><br /><br /><br />
   <b>QUE LE OFRECEMOS:</b><br />
-  - '.$registroPropiedades['tipoProp'].' con capacidad de '.$registroPropiedades['capacidad'].' personas <br />
+  - '.$registroPropiedades['tipoProp'].' de '.$registroPropiedades['km_const'].' con capacidad de '.$registroPropiedades['capacidad'].' personas <br />
+  - '.$registroPropiedades['banos'].' ba&ntilde;os <br />
   - '.$registroPropiedades['habitaciones'].' dormitorios; lenceria incluida<br />';
  $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$queryCotizacion['id_propiedad']."'");
  while($rowServicio=mysql_fetch_assoc($serviciosUsados)){      
