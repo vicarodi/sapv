@@ -51,10 +51,13 @@ $height=$_GET['alto'];
 
 $imagen = imagecreatetruecolor($ancho,$alto); 
 ImageCopyResampled($imagen,$fuente,0,0,0,0,$ancho,$alto,$imgAncho,$imgAlto);
-header("Cache-Control: private, max-age=10800, pre-check=10800");
-header("Pragma: private");
-header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
-header("Content-type: image/Jpeg");
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($thumbnail)) . ' GMT');
-imageJpeg($imagen);
+
+	header("Cache-Control: private, max-age=10800, pre-check=10800");
+	header("Pragma: private");
+	header("Expires: " . date(DATE_RFC822,strtotime(" 2 day")));
+	header("Content-type: image/Jpeg");
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($thumbnail)) . ' GMT');
+	imageJpeg($imagen);
+
+
 ?> 

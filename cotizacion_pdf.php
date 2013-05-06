@@ -1,7 +1,7 @@
 <?php
-//ini_set('memory_limit', '512M');
-//set_time_limit(0);
-//include ("includes/conectar.php");
+ini_set('memory_limit', '512M');
+set_time_limit(0);
+include ("includes/conectar.php");
 require_once('includes/config/lang/eng.php');
 require_once('includes/tcpdf.php');
 $queryCOnfig=mysql_query("select * from configuracion");
@@ -9,14 +9,44 @@ while($rowConfig=mysql_fetch_assoc($queryCOnfig)){
   define($rowConfig['nombre_variable'],$rowConfig['valor']);  
 }
 function devuelveRutadim($ruta,$width,$height){
-	list($imgAncho, $imgAlto, $tipo, $atributos) =getimagesize($ruta);
-	$ancho=$width;
-	@$alto=($imgAlto*$ancho/$imgAncho);
-	if ($alto>$height){
-		$alto=$height;
-		@$ancho=($imgAncho*$alto/$imgAlto);
-	}
-	return 'src="'.$ruta.'" width="'.$ancho.'px" height="'.$alto.'px"';
+	$troxosRuta=explode("/",$ruta);
+	$rutaPDF="sapv/images/propiedades/pdf/".$troxosRuta[count($troxosRuta)-1];
+
+		if(strtolower(substr($ruta,-3))=='jpg'){
+			$fuente = @imagecreatefromjpeg($ruta); 
+		}elseif(strtolower(substr($ruta,-3))=='gif'){
+			$fuente = @imagecreatefromgif($ruta); 
+		}elseif(strtolower(substr($ruta,-3))=='png'){
+			$fuente = @imagecreatefrompng($ruta);
+		}
+		$imgAncho = imagesx ($fuente); 
+		$imgAlto =imagesy($fuente);
+		//$width=$_GET['ancho'];
+		//$height=$_GET['alto'];
+		$ancho=$width;
+		@$alto=($imgAlto*$ancho/$imgAncho);
+    	if ($alto>$height){
+    		$alto=$height;
+    		@$ancho=($imgAncho*$alto/$imgAlto);
+    	}
+		//echo $ancho.",".$alto;
+		$imagen = imagecreatetruecolor($ancho,$alto); 
+		ImageCopyResampled($imagen,$fuente,0,0,0,0,$ancho,$alto,$imgAncho,$imgAlto);
+		$troxosRuta=explode("/",$ruta);
+		$rutaPDF="sapv/images/propiedades/pdf/".$troxosRuta[count($troxosRuta)-1];
+		if(strtolower(substr($ruta,-3))=='jpg'){
+			imagejpeg($imagen,$rutaPDF,97);
+		}elseif(strtolower(substr($ruta,-3))=='gif'){
+			imagegif($imagen,$rutaPDF);
+		}elseif(strtolower(substr($ruta,-3))=='png'){
+			imagepng($imagen,$rutaPDF);
+		}
+		
+		
+		
+		return 'src="'.$rutaPDF.'"';
+	
+	
 }
 
 function devuelveFechasPago($fechaDelVIaje){
@@ -42,7 +72,7 @@ function devuelveFechasPago($fechaDelVIaje){
 	return $nombreDia."|@|".$otraFecha;
 }
 
-$_GET['id']=$id_cotizcacion;
+//$_GET['id']=$id_cotizcacion;
 $queryCotizacion=mysql_fetch_assoc(mysql_query("select * from cotizaciones where id='".$_GET['id']."'"));
 $setPropiedades=mysql_query("SELECT propiedades.id as idPropiedad,propiedades.*, tipo_propiedad.nombre as tipoProp FROM tipo_propiedad inner join propiedades on tipo_propiedad.id=id_tipo_propiedad where propiedades.id='".$queryCotizacion['id_propiedad']."'");
 $registroPropiedades=mysql_fetch_assoc($setPropiedades);
@@ -52,8 +82,8 @@ class MYPDF extends TCPDF {
     //Page header
     public function Header() {
       // Logo
-        $image_file = 'http://localhost/sapv/sapv/images/encabezaPdf.png';
-        $this->Image($image_file, 10, 10, 0, 0, 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $image_file = 'http://localhost/sapv/sapv/images/encabezaPdf.jpg';
+        $this->Image($image_file, 10, 10, 0, 0, 'jpg', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font
     }
 
@@ -242,12 +272,23 @@ $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
   - '.$registroPropiedades['banos'].' ba&ntilde;os <br />
   - '.$registroPropiedades['habitaciones'].' dormitorios; lenceria incluida<br />';
  $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$queryCotizacion['id_propiedad']."'");
- while($rowServicio=mysql_fetch_assoc($serviciosUsados)){      
-   $tableContenido.=' - '.$rowServicio['nombre'].' <br />';
+ $tableContenido.='<table border="0">';
+ $cuentame=0;
+ while($rowServicio=mysql_fetch_assoc($serviciosUsados)){
+   	if($cuentame==0 or ($cuentame%2)==0){
+   		if($cuentame==0){
+   		 $tableContenido.='<tr>';	
+   		}elseif($cuentame!=0 && ($cuentame%2)==0){
+   			$tableContenido.='</tr><tr>';
+   		}
+   	}      
+   $tableContenido.='<td> - '.$rowServicio['nombre'].' </td>';
+   $cuentame++;
  }
-  
+   $tableContenido.='</tr></table>';
   $tableContenido.='</td>
   </tr></table>';
+  //echo $tableContenido;die;
   $tblh = <<<EOD
 $tableContenido
 EOD;
@@ -327,7 +368,7 @@ $tbv = <<<EOD
 $tableContenido
 EOD;
 $pdf->writeHTML($tbv, true, 0, true, 0);
-$pdf->Output("cotizaciones/".$queryCotizacion['codigo'].'.pdf', 'F');
+$pdf->Output("cotizaciones/".$queryCotizacion['codigo'].'.pdf', 'I');
 
 //============================================================+
 // END OF FILE
