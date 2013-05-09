@@ -202,8 +202,8 @@ switch ($_POST['accion']){
         Le adjunto la cotizaci&oacute;n que solicit&oacute; a trav&eacute;s de nuestra p&aacute;gina web<br /> No dude en contactarnos por esta v&iacute;a o por tel&eacute;fono si tiene alguna pregunta
         ";
         include("cotizacion_pdf.php");
-		enviaMail($mensaje,$_POST['email'],"cotizaciones/".$queryCotizacion['codigo'].".pdf","vicarodi@hotmail.com","Renting Florida - Cotizacion ".$queryCotizacion['codigo']);
-        		    
+		enviaMail($mensaje,$_POST['email'],"cotizaciones/".$queryCotizacion['codigo'].".pdf","doral.renting@gmail.com","Renting Florida - Cotizacion ".$queryCotizacion['codigo']);
+        unlink("cotizaciones/".$queryCotizacion['codigo'].".pdf");		    
 		}
     break;
 }

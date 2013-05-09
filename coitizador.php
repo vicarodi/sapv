@@ -1,7 +1,7 @@
 <form id="disponibilidad">
                         <table cellpadding="6" style="margin:5px;font-size: 12px; font-family: Arial;border:1px solid #666;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;" width="100%">
                             <tr>
-                             <td align="center" colspan="2" style="padding:10px;height:10px;background: url(img/header-bg.png) repeat-x;"><strong>COTIZE SU VIAJE AQUI</strong></td>
+                             <td align="center" colspan="2" style="padding:10px;height:10px;background: url(img/header-bg.png) repeat-x;"><strong>COTICE SU VIAJE AQUI</strong></td>
                             </tr>
                             <tr>
                                 <td><strong>Llegada</strong></td>

@@ -61,11 +61,11 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <table style="font-family: Arial;font-size: 12px;" width="80%" align="center">
+                            <table style="font-family: Arial;font-size: 12px;" width="90%" align="center">
                                 <tr>
-                                    <td><b>Capacidad: </b><?php echo $rowPropiedad['capacidad'];?></td>
-                                    <td><b>Habitaciones: </b><?php echo $rowPropiedad['habitaciones'];?></td>
-                                    <td><b>Ba&Ntilde;os: </b><?php echo $rowPropiedad['banos'];?></td>
+                                    <td width="30%"><b>Capacidad: </b><?php echo $rowPropiedad['capacidad'];?> Personas</td>
+                                    <td width="30%"><b>Habitaciones: </b><?php echo $rowPropiedad['habitaciones'];?></td>
+                                    <td width="30%"><b>Ba&ntilde;os: </b><?php echo $rowPropiedad['banos'];?></td>
                                     
                                 </tr>
                                 <tr>
@@ -76,12 +76,12 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                     <td><b>Servicios: </b></td>
                                 </tr>
                                 <tr>
-                                    <td >
+                                    <td valign="top" width="50%">
                                         <?
                                             $querynHabitin=mysql_query("select * from propiedad_habitaciones where id_propiedad='".$_GET['id']."'");
                                            
                                             $numnero=mysql_num_rows($querynHabitin);
-                                            $contenido="<table cellspacing='0' style='font-family: Arial;font-size: 12px;'>";
+                                            $contenido="<table width='75%' cellspacing='0' style='font-family: Arial;font-size: 12px;'>";
                                             $i=0;
                                             while( $queryHabDorm=mysql_fetch_assoc($querynHabitin)){
                                               $contenido.="<tr><td style='padding-left: 70px;'><strong>Habitaci&oacute;n ".($i+1).": </strong></td><td>";
@@ -102,7 +102,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                             if($x>1){ $tam="70px;";}else{ $tam="10px;";}
                                              //<?php echo $tam;
                                           ?>       
-                                            <span style="padding-left:70px;">- <?=$rowServicio['nombre']?></span><br />
+                                            <span style="width:50%;float:left">- <?=$rowServicio['nombre']?></span>
                                           <?
                                           $x++;
                                          }

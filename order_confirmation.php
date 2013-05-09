@@ -135,7 +135,7 @@ $(document).ready(function(){
 	        url: "ajax.php",
 	        data: envias+"accion=creaCoti&id_Propiedad=<?=$_GET['id']?>",
 	        complete: function(datos){
-	        	if(datos.responseText==0){
+	        	if(datos.responseText=='0'){
 	        		alert("El codigo de seguridad que ingreso no es correcto");
 	        	}else{
 	        		$("#formularioCotizacion").html("<div class='ui-state-highlight ui-corner-all' style='margin-top: 20px; padding: 0px 0.7em;'><p><span class='ui-icon ui-icon-info' style='float: left; margin-right: 0.3em;'></span>Su cotizaci&oacute;n ha sido enviada a "+email+". No dude en contactarnos para hacer la reserva.</div>");

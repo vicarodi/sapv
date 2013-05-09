@@ -347,21 +347,22 @@ switch ($_GET['accion']){
      <tr>
         <td><strong>Ba&ntilde;os:</strong></td>
         <td>
+        	
         <select name="banos" title="Ba&ntilde;os">    
-        <?
-         for($i=1;$i<=5;$i++){
-            if($row_medico['banos']==$i){
-              echo "<option selected value='".$i."'>".$i."</option>";  
-              echo "<option value='".$i."  1/2'>".$i." 1/2</option>";  
-            }elseif($row_medico['banos']==$i." 1/2"){
-               echo "<option selected value='".$i."  1/2'>".$i." 1/2</option>";
-               echo "<option value='".$i."'>".$i."</option>";   
-            }else{
-              echo "<option value='".$i."'>".$i."</option>";  
-                echo "<option value='".$i."  1/2'>".$i." 1/2</option>";    
-    		}
-           
-        }
+	        <?
+	         for($i=1;$i<=5;$i++){
+	         	$variable=$i." 1/2";
+	            if($row_medico['banos']==$variable){
+	              echo "<option value='".$i."'>".$i."</option>";  
+	              echo "<option selected value='".$i." 1/2'>".$i." 1/2</option>";  
+	            }elseif($row_medico['banos']==$i){
+	              echo "<option selected value='".$i."'>".$i."</option>";   
+	              echo "<option value='".$i." 1/2'>".$i." 1/2</option>";
+	            }else{
+	              echo "<option value='".$i."'>".$i."</option>";  
+	              echo "<option value='".$i." 1/2'>".$i." 1/2</option>";    
+	    		}
+	        }
         ?>
         </select>
         </td>

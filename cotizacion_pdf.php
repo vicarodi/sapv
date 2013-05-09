@@ -1,14 +1,14 @@
 <?php
-ini_set('memory_limit', '512M');
-set_time_limit(0);
-include ("includes/conectar.php");
+//ini_set('memory_limit', '512M');
+//set_time_limit(0);
+//include ("includes/conectar.php");
 require_once('includes/config/lang/eng.php');
 require_once('includes/tcpdf.php');
 $queryCOnfig=mysql_query("select * from configuracion");
 while($rowConfig=mysql_fetch_assoc($queryCOnfig)){
   define($rowConfig['nombre_variable'],$rowConfig['valor']);  
 }
-function devuelveRutadim($ruta,$width,$height){
+function devuelveRutadim($ruta,$width,$height,$bandera=1){
 	$troxosRuta=explode("/",$ruta);
 	$rutaPDF="sapv/images/propiedades/pdf/".$troxosRuta[count($troxosRuta)-1];
 
@@ -21,8 +21,7 @@ function devuelveRutadim($ruta,$width,$height){
 		}
 		$imgAncho = imagesx ($fuente); 
 		$imgAlto =imagesy($fuente);
-		//$width=$_GET['ancho'];
-		//$height=$_GET['alto'];
+		
 		$ancho=$width;
 		@$alto=($imgAlto*$ancho/$imgAncho);
     	if ($alto>$height){
@@ -30,23 +29,24 @@ function devuelveRutadim($ruta,$width,$height){
     		@$ancho=($imgAncho*$alto/$imgAlto);
     	}
 		//echo $ancho.",".$alto;
-		$imagen = imagecreatetruecolor($ancho,$alto); 
-		ImageCopyResampled($imagen,$fuente,0,0,0,0,$ancho,$alto,$imgAncho,$imgAlto);
-		$troxosRuta=explode("/",$ruta);
-		$rutaPDF="sapv/images/propiedades/pdf/".$troxosRuta[count($troxosRuta)-1];
-		if(strtolower(substr($ruta,-3))=='jpg'){
-			imagejpeg($imagen,$rutaPDF,97);
-		}elseif(strtolower(substr($ruta,-3))=='gif'){
-			imagegif($imagen,$rutaPDF);
-		}elseif(strtolower(substr($ruta,-3))=='png'){
-			imagepng($imagen,$rutaPDF);
+		if($bandera==1){
+			$imagen = imagecreatetruecolor($ancho,$alto); 
+			ImageCopyResampled($imagen,$fuente,0,0,0,0,$ancho,$alto,$imgAncho,$imgAlto);
+			$troxosRuta=explode("/",$ruta);
+			$rutaPDF="sapv/images/propiedades/pdf/".$troxosRuta[count($troxosRuta)-1];
+			if(strtolower(substr($ruta,-3))=='jpg'){
+				imagejpeg($imagen,$rutaPDF,100);
+			}elseif(strtolower(substr($ruta,-3))=='gif'){
+				imagegif($imagen,$rutaPDF);
+			}elseif(strtolower(substr($ruta,-3))=='png'){
+				imagepng($imagen,$rutaPDF);
+			}
+			return 'src="'.$rutaPDF.'"';
+		}else{
+			$rutaPDF=$ruta;
+			return 'src="'.$rutaPDF.'" width="'.$ancho.'px" height="'.$alto.'px"';
 		}
 		
-		
-		
-		return 'src="'.$rutaPDF.'"';
-	
-	
 }
 
 function devuelveFechasPago($fechaDelVIaje){
@@ -72,7 +72,7 @@ function devuelveFechasPago($fechaDelVIaje){
 	return $nombreDia."|@|".$otraFecha;
 }
 
-//$_GET['id']=$id_cotizcacion;
+$_GET['id']=$id_cotizcacion;
 $queryCotizacion=mysql_fetch_assoc(mysql_query("select * from cotizaciones where id='".$_GET['id']."'"));
 $setPropiedades=mysql_query("SELECT propiedades.id as idPropiedad,propiedades.*, tipo_propiedad.nombre as tipoProp FROM tipo_propiedad inner join propiedades on tipo_propiedad.id=id_tipo_propiedad where propiedades.id='".$queryCotizacion['id_propiedad']."'");
 $registroPropiedades=mysql_fetch_assoc($setPropiedades);
@@ -82,8 +82,10 @@ class MYPDF extends TCPDF {
     //Page header
     public function Header() {
       // Logo
-        $image_file = 'http://localhost/sapv/sapv/images/encabezaPdf.jpg';
-        $this->Image($image_file, 10, 10, 0, 0, 'jpg', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $image_file = 'sapv/images/encabezaPdf.jpg';
+        $html = '<table><tr><td><img src="'.$image_file.'" width="515px" height="131px" /></td></tr></table>';
+     $this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
+
         // Set font
     }
 
@@ -127,7 +129,7 @@ $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 //set margins
 $pdf->SetMargins(15, 65, 15);
-$pdf->SetHeaderMargin(40);
+$pdf->SetHeaderMargin(10);
 $pdf->SetFooterMargin(15);
 
 //set auto page breaks
@@ -159,50 +161,48 @@ if($noches>=15){
 $totalApagar=($queryCotizacion['monto_diario']*$noches)+$limpiezaTotal+(int)$registroPropiedades['deposito'];
 list($cincuenta,$totalMon)=explode("|@|",devuelveFechasPago($queryCotizacion['fecha_in']));
 
-$tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
-
+$tableContenido='<table width="100%">
   <tr>
     <td><p>Estimado(a) '.$queryCotizacion['nombre'].' '.$queryCotizacion['apellido'].',<br /><br />
 Muchas gracias por su contacto.<br /> 
 Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
 </p></td>
-  </tr>
-  
+  </tr> 
   <tr>
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td><table cellspacing="0" cellpadding="0" style="line-height:8px;">
-      <tr style="background-color:#ccc">
-        <td align="center"  width="60%" height="15px" style="line-height:5px;border:1px solid #e1e1e1"><strong>DESCRIPCI&Oacute;N</strong></td>
-        <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>PRECIO POR NOCHE</strong></td>
-        <td align="center" width="20%" style="line-height:5px;border:1px solid #e1e1e1">&nbsp;<strong>TOTAL</strong></td>
+    <td><table width="100%" border="0" style="border:1px solid #ccffff"><tr style="background-color:#ccc">
+        <td align="center"  width="60%" height="15px" style="line-heigth:5px;border:1px solid #ffffff"><strong>DESCRIPCI&Oacute;N</strong></td>
+        <td align="center" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;<strong>PRECIO POR NOCHE</strong></td>
+        <td align="center" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;<strong>TOTAL</strong></td>
       </tr>
       <tr>
-        <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
+        <td width="60%" height="15px" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
       </tr>
       <tr style="background-color:#fbfbfb;">
-        <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$queryCotizacion['limpieza'].'&nbsp;</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$limpiezaTotal.'&nbsp;</td>
+        <td width="60%" height="15px" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$queryCotizacion['limpieza'].'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$limpiezaTotal.'&nbsp;</td>
       </tr>
       <tr>
-      <td width="60%" height="15px" style="border:1px solid #e1e1e1">&nbsp;Dep&oacute;sito de Seguridad (devuelto 48 horas despu&eacute;s de su check-out)</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
-        <td width="20%" align="right" style="border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
+      <td width="60%" height="15px" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;Dep&oacute;sito de Seguridad (devuelto 48 horas despu&eacute;s de su check-out)</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$registroPropiedades['deposito'].'&nbsp;</td>
       </tr>
       <tr>
         <td align="right" width="60%" style="color:#AFAFAF;font-size:20px;border:1px solid #e1e1e1"><br /></td>
         <td align="right" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1"><br /><strong>TOTAL</strong></td>
-        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1"><br />$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
       </tr>
     </table></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
   </tr>';
+
   $fechaHoy=date("Y-m-d");
   $nochesPagos=diasDiferencia($fechaHoy,$queryCotizacion['fecha_in'])+1;
   if($nochesPagos<30){
@@ -238,7 +238,7 @@ $tbl = <<<EOD
 $tableContenido
 EOD;
 
-$pdf->writeHTML($tbl, true, 0, true, 0);
+$pdf->writeHTML($tbl, true, false, false, false, ''); 
 $pdf->AddPage();
 
 $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -293,7 +293,7 @@ $tableContenido='<table width="100%" border="0" cellspacing="0" cellpadding="0">
 $tableContenido
 EOD;
 
-$pdf->writeHTML($tblh, true, 0, true, 0);
+$pdf->writeHTML($tblh, true, false, false, false, ''); 
 $pdf->AddPage();
 
   $tableContenido='<table><tr>
@@ -309,19 +309,19 @@ $tbl = <<<EOD
 $tableContenido
 EOD;
 
-$pdf->writeHTML($tbl, true, 0, true, 0);
+$pdf->writeHTML($tbl, true, false, false, false, ''); 
 $pdf->AddPage();
 $tableContenido='<table><tr>
-    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350).' /></td>
+    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350,2).' /></td>
   </tr>
   <tr>
-    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350).' /></td>
+    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350,2).' /></td>
   </tr></table>';
  
   $tbg = <<<EOD
 $tableContenido
 EOD;
-$pdf->writeHTML($tbg, true, 0, true, 0);
+$pdf->writeHTML($tbg, true, false, false, false, ''); 
  $pdf->AddPage();
  $tableContenido=' <table>
   <tr>
@@ -367,8 +367,8 @@ $pdf->writeHTML($tbg, true, 0, true, 0);
 $tbv = <<<EOD
 $tableContenido
 EOD;
-$pdf->writeHTML($tbv, true, 0, true, 0);
-$pdf->Output("cotizaciones/".$queryCotizacion['codigo'].'.pdf', 'I');
+$pdf->writeHTML($tbv, true, false, false, false, ''); 
+$pdf->Output("cotizaciones/".$queryCotizacion['codigo'].'.pdf', 'F');
 
 //============================================================+
 // END OF FILE
