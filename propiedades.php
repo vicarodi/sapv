@@ -209,7 +209,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                     }
                     ul.thumbs li img{
                        margin-left:5px;
-                       margin-bottom:5px
+                       margin-bottom:10px
                     }
                     ul.thumbs{
                         margin:95px 5px 0px 5px;
@@ -221,9 +221,9 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                             $('#slides1').bxGallery({
                                maxheight :300,
                                 maxwidth :400,
-                                thumbwidth: 100,
+                                thumbwidth: 85,
                                 thumbplacement: 'right',
-                                thumbcontainer: 500,
+                                thumbcontainer: 450,
                                 thumbcrop:true, 
                                 load_image: 'includes/javascript/bxGallery/spinner.gif'
                             });

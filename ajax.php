@@ -113,7 +113,7 @@ switch ($_POST['accion']){
      for($con=0;$con<count($arregloBloq);$con++){
        if($con==0){
            $diasdif=diasDiferencia($arregloBloq[$con]['fecha_inicio'],date("Y-m-d"));
-           if($diasdif>0 && $arregloBloq[$con]['fecha_inicio']>date("Y-m-d")){
+           if(($diasdif>0) && ($arregloBloq[$con]['fecha_inicio']>date("Y-m-d"))){
             ?>
             <tr>
                 <td>Del <?=date("d/m/Y")?> al <?=dame_fecha_proxima(fechasnormal($arregloBloq[$con]['fecha_inicio']),-1)?></td>

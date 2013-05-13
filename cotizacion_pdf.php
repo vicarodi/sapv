@@ -149,7 +149,7 @@ $pdf->SetFont('helvetica', '', 10);
 // add a page
 $pdf->setPageFormat( 'LETTER','P');
 $pdf->AddPage();
-$noches=diasDiferencia($queryCotizacion['fecha_in'],$queryCotizacion['fecha_out'])+1;
+$noches=diasDiferencia($queryCotizacion['fecha_in'],$queryCotizacion['fecha_out']);
 $limpiezaTotal=$queryCotizacion['limpieza'];
 
 
@@ -204,7 +204,7 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
   </tr>';
 
   $fechaHoy=date("Y-m-d");
-  $nochesPagos=diasDiferencia($fechaHoy,$queryCotizacion['fecha_in'])+1;
+  $nochesPagos=diasDiferencia($fechaHoy,$queryCotizacion['fecha_in']);
   if($nochesPagos<30){
   	$tableContenido.='  <tr>
     <td><p>Para reservar su fecha solo debe depositar:<br />
@@ -311,18 +311,37 @@ EOD;
 
 $pdf->writeHTML($tbl, true, false, false, false, ''); 
 $pdf->AddPage();
-$tableContenido='<table><tr>
+$tableContenido="";
+
+if($registroPropiedades['mapa_general']!="" && file_exists('sapv/images/propiedades/'.$registroPropiedades['mapa_general'])){
+	$tableContenido='<table><tr>
+    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350,2).' /></td>
+  </tr>';
+}
+if($registroPropiedades['mapa_cerrado']!="" && file_exists('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'])){
+	if($tableContenido==""){
+	$tableContenido.='<table>';	
+	}
+	$tableContenido.='<tr>
+    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350,2).' /></td>
+  </tr>';
+}
+if($tableContenido!=""){
+	$tableContenido.="</table>";  
+	$tbg = <<<EOD
+$tableContenido
+EOD;
+$pdf->writeHTML($tbg, true, false, false, false, ''); 
+ $pdf->AddPage();
+}
+/*$tableContenido='<table><tr>
     <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350,2).' /></td>
   </tr>
   <tr>
     <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350,2).' /></td>
   </tr></table>';
- 
-  $tbg = <<<EOD
-$tableContenido
-EOD;
-$pdf->writeHTML($tbg, true, false, false, false, ''); 
- $pdf->AddPage();
+ */
+
  $tableContenido=' <table>
   <tr>
   <td>
@@ -331,10 +350,13 @@ $pdf->writeHTML($tbg, true, false, false, false, '');
          $numeroImagenes=mysql_num_rows($queryImagenes);
          $v=0;
 		 $h=0;
-         while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){ 
-        	
-			$tamanini=getimagesize('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen']);
-			$arregloImagenes[($tamanini[0]-$tamanini[1]).$rowIMagenes['id']]=$rowIMagenes['ruta_imagen'];
+         while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){
+         	//echo  $rowIMagenes['ruta_imagen']."-----   ";
+        	if($rowIMagenes['ruta_imagen']!="" && file_exists('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen'])){
+        		$tamanini=getimagesize('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen']);
+				$arregloImagenes[($tamanini[0]-$tamanini[1]).$rowIMagenes['id']]=$rowIMagenes['ruta_imagen'];
+        	}
+			
 			//echo $imgAncho." ".$imgAlto." ".$alto." ".$ancho."<br />";
          }
 		//print_r($arregloImagenes);
@@ -352,7 +374,10 @@ $pdf->writeHTML($tbg, true, false, false, false, '');
 			$tableContenido.='</tr>';
          	$tableContenido.='<tr>';
 			$tableContenido.='<td><img '.devuelveRutadim('sapv/images/propiedades/'.$otroArreglo[$h],260,260).' /></td>';
-			$tableContenido.='<td><img '.devuelveRutadim('sapv/images/propiedades/'.$otroArreglo[($h+1)],260,260).' /></td>';
+			if($otroArreglo[($h+1)]!=""){
+				$tableContenido.='<td><img '.devuelveRutadim('sapv/images/propiedades/'.$otroArreglo[($h+1)],260,260).' /></td>';
+			}
+			
 			$tableContenido.='</tr>';
 			
          }

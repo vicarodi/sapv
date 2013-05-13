@@ -857,7 +857,7 @@ text: false
                         
                         
                          //$(".calendarios21").datepicker( $.datepicker.regional[ "es" ] );
-                         $(".calendarios21").datepicker({
+                         $("#disp_fin").datepicker({
                            dateFormat:"yy-mm-dd",
                            changeMonth: true,
                            changeYear: true, 
@@ -865,6 +865,18 @@ text: false
                            yearRange: "c-1:c+1",
                           minDate:"+3D"
                             
+                        });
+                        
+                        $("#disp_inicio").datepicker({
+                        	dateFormat:"yy-mm-dd",
+                           changeMonth: true,
+                           changeYear: true, 
+                           maxDate: "+1Y",
+                           yearRange: "c-1:c+1",
+                          minDate:"+3D",
+                          onClose: function( selectedDate ) {
+        					$("#disp_fin").datepicker( "option", "minDate", selectedDate );	
+                        }
                         });
 			         } );
             function traeHab(valor,id_propiedad){
