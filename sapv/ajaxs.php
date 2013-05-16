@@ -37,7 +37,7 @@
 	   $queryImagen=mysql_fetch_assoc(mysql_query("select * from propiedad_imagenes where id='".$_POST['id']."'"));
          @unlink("images/propiedades/".$queryImagen['ruta_imagen']);
 	     mysql_query("delete from propiedad_imagenes where id='".$_POST['id']."'");
-         $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_POST['id_propiedad']."'");
+         $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_POST['id_propiedad']."' order by orden");
          $numeroImagenes=mysql_num_rows($queryImagenes);
          while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){
             if($v==0){
@@ -47,12 +47,29 @@
             if($h==0){
               echo "</tr><tr>";  
             }
-           
-           echo "<td align='center' style='border:1px solid #1C5886' ><table width='100%'>
+            if($rowIMagenes['imagen_principal']==1){
+			$checimg="checked='true'";
+			$textimg="Imagen Principal";
+			echo "<input type='hidden' name='id_img_princ' id='id_img_princ' value='".$rowIMagenes['id']."'>";
+	   }else{
+			$checimg="";
+			$textimg="Colocar Imagen como Principal";
+	   }
+	   
+       echo "<td align='center' style='border:1px solid #1C5886' >
+           <table width='100%'>
+		    <tr>
+				<td align='right' colspan='2'>
+					<div align='right' title='".$textimg."'><input type='radio' ".$checimg." name='imagenprincipal' id='imagenprincipal".$rowIMagenes['id']."' value='".$rowIMagenes['id']."' onclick='img_principal(this.value)' alt='Establecer como Imagen Principal' title='' ></div>
+				</td>
+			</tr>
             <tr>
-                <td align='center' height='150px'><img src='thumb.php?ancho=150&alto=150&ruta=images/propiedades/".$rowIMagenes['ruta_imagen']."' />
+                <td align='center'  colspan='2' height='150px'><img src='thumb.php?ancho=150&alto=150&ruta=images/propiedades/".$rowIMagenes['ruta_imagen']."' />
           </td><tr>
-                <td valign='bottom' align='center'><a class='eliminaButton' href='javascript:void(0)' onclick='eliminaImagen(".$rowIMagenes['id'].")'>Eliminar</a></td>
+                <td valign='bottom' align='center'><a class='eliminaButton' href='javascript:void(0)' onclick='eliminaImagen(".$rowIMagenes['id'].")'>Eliminar</a>
+               </td>
+                <td align='right'><input type='text' size='3' id='Image_".$rowIMagenes['id']."' value='".$rowIMagenes['orden']."' onchange='cambiaOrdenImage(this.id,this.value)' name='imagen_".$rowIMagenes['id']."' />
+                </td>
             </tr>
            </table></td>"; 
            $h++;
@@ -61,6 +78,52 @@
            }
          }
          echo "</tr>";
+	}elseif($_POST['tipo']=="cambiaOrden"){
+		$idImagen=str_replace("Image_", "", $_POST['id']);
+		mysql_query("update propiedad_imagenes set orden='".$_POST['valor']."' where id='".$idImagen."'");
+		$queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_POST['id_propiedad']."' order by orden");
+         $numeroImagenes=mysql_num_rows($queryImagenes);
+         while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){
+            if($v==0){
+              echo "<tr>";
+              $v++;   
+            }
+            if($h==0){
+              echo "</tr><tr>";  
+            }
+            if($rowIMagenes['imagen_principal']==1){
+			$checimg="checked='true'";
+			$textimg="Imagen Principal";
+			echo "<input type='hidden' name='id_img_princ' id='id_img_princ' value='".$rowIMagenes['id']."'>";
+	   }else{
+			$checimg="";
+			$textimg="Colocar Imagen como Principal";
+	   }
+	   
+       echo "<td align='center' style='border:1px solid #1C5886' >
+           <table width='100%'>
+		    <tr>
+				<td align='right' colspan='2'>
+					<div align='right' title='".$textimg."'><input type='radio' ".$checimg." name='imagenprincipal' id='imagenprincipal".$rowIMagenes['id']."' value='".$rowIMagenes['id']."' onclick='img_principal(this.value)' alt='Establecer como Imagen Principal' title='' ></div>
+				</td>
+			</tr>
+            <tr>
+                <td align='center'  colspan='2' height='150px'><img src='thumb.php?ancho=150&alto=150&ruta=images/propiedades/".$rowIMagenes['ruta_imagen']."' />
+          </td><tr>
+                <td valign='bottom' align='center'><a class='eliminaButton' href='javascript:void(0)' onclick='eliminaImagen(".$rowIMagenes['id'].")'>Eliminar</a>
+                </td>
+                <td align='right'><input type='text' size='3' id='Image_".$rowIMagenes['id']."' value='".$rowIMagenes['orden']."' onchange='cambiaOrdenImage(this.id,this.value)' name='imagen_".$rowIMagenes['id']."' />
+                
+                </td>
+            </tr>
+           </table></td>"; 
+           $h++;
+           if($h==3){
+            $h=0;
+           }
+         }
+         echo "</tr>";
+		
 	}elseif($_POST['tipo']=='agregaTarifa'){
 	  mysql_query("insert into propiedad_tarifas (id_propiedad,precio_diario,precio_mensual,limpieza,fecha_comienzo,fecha_fin) 
       values ('".$_POST['id_propiedad']."','".$_POST['precio_noche']."','".$_POST['precio_mensual']."','".$_POST['fee_limpieza']."','".$_POST['fecha_inicio']."','".$_POST['fecha_fin']."')"); 

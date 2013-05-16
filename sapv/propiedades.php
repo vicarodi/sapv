@@ -460,7 +460,7 @@ switch ($_GET['accion']){
      <?
      $h="";
      $v=0;
-     $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_GET['id']."'");
+     $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_GET['id']."' order by orden");
      $numeroImagenes=mysql_num_rows($queryImagenes);
      while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){
         if($v==0){
@@ -482,15 +482,20 @@ switch ($_GET['accion']){
        echo "<td align='center' style='border:1px solid #1C5886' >
            <table width='100%'>
 		    <tr>
-				<td align='right'>
+				<td align='right' colspan='2'>
 					<div align='right' title='".$textimg."'><input type='radio' ".$checimg." name='imagenprincipal' id='imagenprincipal".$rowIMagenes['id']."' value='".$rowIMagenes['id']."' onclick='img_principal(this.value)' alt='Establecer como Imagen Principal' title='' ></div>
 				</td>
 			</tr>
             <tr>
-                <td align='center' height='150px'><img src='thumb.php?ancho=150&alto=150&ruta=images/propiedades/".$rowIMagenes['ruta_imagen']."' /></td>
+                <td align='center' height='150px'  colspan='2'><img src='thumb.php?ancho=150&alto=150&ruta=images/propiedades/".$rowIMagenes['ruta_imagen']."' /></td>
             </tr>
             <tr>
-                <td valign='bottom' align='center'><a class='eliminaButton' href='javascript:void(0)' onclick='eliminaImagen(".$rowIMagenes['id'].")'>Eliminar</a></td>
+                <td valign='bottom' align='center'><a class='eliminaButton' href='javascript:void(0)' onclick='eliminaImagen(".$rowIMagenes['id'].")'>Eliminar</a>
+                
+                </td>
+                <td align='right'><input type='text' size='3' value='".$rowIMagenes['orden']."' id='Image_".$rowIMagenes['id']."' onchange='cambiaOrdenImage(this.id,this.value)' name='imagen_".$rowIMagenes['id']."' />
+                
+                </td>
             </tr>
            </table>
             </td>"; 
@@ -757,6 +762,25 @@ echo "<tbody>";
 
 </script>
 <script type="text/javascript" charset="utf-8">
+		function cambiaOrdenImage(id,valor){
+			  $.ajax({
+                type: "POST",
+                url: "ajaxs.php",
+                beforeSend: function(){
+                    $("#idImagenes").html('<img src="images/ajax-loader.gif">');
+                },
+                data: "tipo=cambiaOrden&id_propiedad="+<?=$_GET['id']?>+"&valor="+valor+"&id="+id,
+                complete: function(datos){
+             	$("#idImagenes").html(datos.responseText);
+             	$(".eliminaButton").button({
+      icons: {
+        primary: "ui-icon-trash"
+      },
+text: false
+    });               
+                }
+              });
+			}
 			$(document).ready(function() {
 				$('#listado').dataTable( {
 					"bJQueryUI": true,

@@ -30,6 +30,15 @@ function devuelveRutadim($ruta,$width,$height,$bandera=1){
     	}
 		//echo $ancho.",".$alto;
 		if($bandera==1){
+		  $widthOri=$width;
+          $heightOri=$height;
+		  $ancho=($width+120);
+        $height=($height+120);
+		@$alto=($imgAlto*$ancho/$imgAncho);
+    	if ($alto>$height){
+    		$alto=$height;
+    		@$ancho=($imgAncho*$alto/$imgAlto);
+    	}
 			$imagen = imagecreatetruecolor($ancho,$alto); 
 			ImageCopyResampled($imagen,$fuente,0,0,0,0,$ancho,$alto,$imgAncho,$imgAlto);
 			$troxosRuta=explode("/",$ruta);
@@ -41,7 +50,13 @@ function devuelveRutadim($ruta,$width,$height,$bandera=1){
 			}elseif(strtolower(substr($ruta,-3))=='png'){
 				imagepng($imagen,$rutaPDF);
 			}
-			return 'src="'.$rutaPDF.'"';
+            $ancho=$widthOri;
+		@$alto=($imgAlto*$ancho/$imgAncho);
+    	if ($alto>$heightOri){
+    		$alto=$heightOri;
+    		@$ancho=($imgAncho*$alto/$imgAlto);
+    	}
+			return 'src="'.$rutaPDF.'" width="'.$ancho.'px" height="'.$alto.'px"';
 		}else{
 			$rutaPDF=$ruta;
 			return 'src="'.$rutaPDF.'" width="'.$ancho.'px" height="'.$alto.'px"';
@@ -179,8 +194,8 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
       </tr>
       <tr>
         <td width="60%" height="15px" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;Hospedaje Del '.fechasnormal($queryCotizacion['fecha_in']).' al '.fechasnormal($queryCotizacion['fecha_out']).'  '.$noches.' noches </td>
-        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.round($queryCotizacion['monto_total']/$noches).'&nbsp;</td>
-        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_total'].'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.$queryCotizacion['monto_diario'].'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1">$ '.number_format(($queryCotizacion['monto_diario']*$noches),0,",",".").'&nbsp;</td>
       </tr>
       <tr style="background-color:#fbfbfb;">
         <td width="60%" height="15px" style="line-heigth:5px;border:1px solid #e1e1e1">&nbsp;Fee de Limpieza (1 cada 2 semanas)</td>
@@ -195,7 +210,7 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
       <tr>
         <td align="right" width="60%" style="color:#AFAFAF;font-size:20px;border:1px solid #e1e1e1"><br /></td>
         <td align="right" width="20%" style="line-heigth:5px;border:1px solid #e1e1e1"><br /><strong>TOTAL</strong></td>
-        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1"><br />$ '.number_format($totalApagar,2,",",".").'&nbsp;</td>
+        <td width="20%" align="right" style="line-heigth:5px;border:1px solid #e1e1e1"><br />$ '.number_format($totalApagar,0,",",".").'&nbsp;</td>
       </tr>
     </table></td>
   </tr>
@@ -208,7 +223,7 @@ Le informo entonces las tarifas  tal y como las solicit&oacute;.<br />
   if($nochesPagos<30){
   	$tableContenido.='  <tr>
     <td><p>Para reservar su fecha solo debe depositar:<br />
-  <b>$ '.number_format((($queryCotizacion['monto_diario']*$noches)),2,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format((($queryCotizacion['monto_diario']*$noches))*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
+  <b>$ '.number_format($totalApagar,0,",",".").'</b> antes del '.$cincuenta.' o <b>Bs. '.number_format(($totalApagar)*(int)CAMBIO_DOLAR,2,",",".").'</b> .<br />
   
 Puede hacer su pago tanto en $ como en Bs. Recomendamos hacer el dep&oacute;sito de seguridad ('.$registroPropiedades['deposito'].'$) en Bol&iacute;vares.<br />
 <br /><br />';
@@ -315,7 +330,7 @@ $tableContenido="";
 
 if($registroPropiedades['mapa_general']!="" && file_exists('sapv/images/propiedades/'.$registroPropiedades['mapa_general'])){
 	$tableContenido='<table><tr>
-    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],350,350,2).' /></td>
+    <td align="center"><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_general'],360,360,2).' /></td>
   </tr>';
 }
 if($registroPropiedades['mapa_cerrado']!="" && file_exists('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'])){
@@ -323,7 +338,7 @@ if($registroPropiedades['mapa_cerrado']!="" && file_exists('sapv/images/propieda
 	$tableContenido.='<table>';	
 	}
 	$tableContenido.='<tr>
-    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],350,350,2).' /></td>
+    <td align="center" ><img '.devuelveRutadim('sapv/images/propiedades/'.$registroPropiedades['mapa_cerrado'],360,360,2).' /></td>
   </tr>';
 }
 if($tableContenido!=""){
@@ -346,7 +361,7 @@ $pdf->writeHTML($tbg, true, false, false, false, '');
   <tr>
   <td>
   <table border="0">';
-  $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$queryCotizacion['id_propiedad']."'");
+  $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$queryCotizacion['id_propiedad']."' order by orden");
          $numeroImagenes=mysql_num_rows($queryImagenes);
          $v=0;
 		 $h=0;
@@ -354,13 +369,14 @@ $pdf->writeHTML($tbg, true, false, false, false, '');
          	//echo  $rowIMagenes['ruta_imagen']."-----   ";
         	if($rowIMagenes['ruta_imagen']!="" && file_exists('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen'])){
         		$tamanini=getimagesize('sapv/images/propiedades/'.$rowIMagenes['ruta_imagen']);
-				$arregloImagenes[($tamanini[0]-$tamanini[1]).$rowIMagenes['id']]=$rowIMagenes['ruta_imagen'];
+				//$arregloImagenes[($tamanini[0]-$tamanini[1]).$rowIMagenes['id']]=$rowIMagenes['ruta_imagen'];
+				$arregloImagenes[]=$rowIMagenes['ruta_imagen'];
         	}
 			
 			//echo $imgAncho." ".$imgAlto." ".$alto." ".$ancho."<br />";
          }
 		//print_r($arregloImagenes);
-		krsort($arregloImagenes);
+		//krsort($arregloImagenes);
 		//print_r($arregloImagenes);
 		foreach($arregloImagenes as $clave => $valor){
 			$otroArreglo[]=$valor;

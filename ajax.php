@@ -38,7 +38,7 @@ switch ($_POST['accion']){
               $arregloEle[]=dame_fecha_proxima($_POST['llegada'],$j);
             }
         ?>
-        <table width="100%" style="font-family: Arial;font-size: 14px;">
+        <table width="98%" style="font-family: Arial;font-size: 14px;margin-left: 5px;">
         <tr>
         <td colspan="5" align="right"><strong>PROPIEDADES DISPONIBLES</strong><br />del <strong><?=$_POST['llegada']?></strong> al <strong><?=$_POST['salida']?></strong>, <?=$_POST['adultos']?> Adultos, <?=$_POST['ninos']?> Ni&ntilde;os</td>
         </tr>
@@ -121,7 +121,7 @@ switch ($_POST['accion']){
             <?
            }
        }
-       
+       if($arregloBloq[$con]['fecha_fin']>date("Y-m-d")){
        ?>
        <tr>
        <td>Del <?=dame_fecha_proxima(fechasnormal($arregloBloq[$con]['fecha_fin']),1)?> al 
@@ -136,6 +136,7 @@ switch ($_POST['accion']){
        </td>
        </tr>
        <?
+       }
      }
      ?></table>
                           <?  

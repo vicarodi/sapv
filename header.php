@@ -17,9 +17,7 @@ require_once("sapv/includes/funciones.php");
 <meta name="Rating" content="General">
 <meta name="Generator" content="Apartamento de Lujo en Miami - Alquiler de apartamento en Miami - rentingflorida.net">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"/>
-<link rel="stylesheet" href="http://www.rentingflorida.net/css/lightbox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="http://www.rentingflorida.net/js/lightbox.js"></script>
-<script type='text/javascript' src='sapv/js/jquery.js'></script>
+<script type='text/javascript' src='sapv/js/jquery17.js'></script>
 <script src="sapv/js/jquery.uniform.js" type="text/javascript"></script>
 <link rel="stylesheet" href="sapv/css/uniform.default.css" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="sapv/css/blitzer/jquery-ui-1.7.2.custom.css" type="text/css">
@@ -32,7 +30,7 @@ $(document).ready(function(){
  
   $("#llegada").datepicker({
     constrainInput: true,
-    minDate:"+3D",
+    minDate:"+2D",
     maxDate: "+1Y",
     onClose: function( selectedDate ) {
         $("#salida").datepicker( "option", "minDate", selectedDate );
@@ -40,7 +38,7 @@ $(document).ready(function(){
     });
     $("#salida").datepicker({
     constrainInput: true,
-    minDate:"+3D",
+    minDate:"+2D",
     maxDate: "+1Y"
     });
  $(".calendarios").datepicker( $.datepicker.regional[ "es" ] );

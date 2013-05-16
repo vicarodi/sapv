@@ -37,9 +37,9 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                         </tr>
                     </table>
              </div>
-             <ul id="slides1" style="text-align:center;margin: 10px 10px;padding: 0px;">
+             <ul id="slidesVic" style="margin: 10px 10px;padding: 0px;">
                  <?php
-                 $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_GET['id']."'");
+                 $queryImagenes=mysql_query("select * from propiedad_imagenes where id_propiedad='".$_GET['id']."' order by orden");
                  $numeroImagenes=mysql_num_rows($queryImagenes);
                  while($rowIMagenes=mysql_fetch_assoc($queryImagenes)){
                    ?>
@@ -81,7 +81,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                             $querynHabitin=mysql_query("select * from propiedad_habitaciones where id_propiedad='".$_GET['id']."'");
                                            
                                             $numnero=mysql_num_rows($querynHabitin);
-                                            $contenido="<table width='75%' cellspacing='0' style='font-family: Arial;font-size: 12px;'>";
+                                            $contenido="<table width='90%' cellspacing='0' style='font-family: Arial;font-size: 12px;'>";
                                             $i=0;
                                             while( $queryHabDorm=mysql_fetch_assoc($querynHabitin)){
                                               $contenido.="<tr><td style='padding-left: 70px;'><strong>Habitaci&oacute;n ".($i+1).": </strong></td><td>";
@@ -94,7 +94,7 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                             echo $contenido;
                                             ?>
                                     </td>
-                                    <td>
+                                    <td  width="50%" colspan="2">
                                         <?
                                          $x=1;
                                          $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$_GET['id']."'");
@@ -109,91 +109,11 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
                                         ?>
                                     </td>
                                 </tr>
-                                <!--
-                                <tr>
-                                    <td colspan="3"><b>Servicios: </b>
-                                        <?
-                                         $x=1;
-                                         $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$_GET['id']."'");
-                                         while($rowServicio=mysql_fetch_assoc($serviciosUsados)){
-                                            if($x>1){ $tam="70px;";}else{ $tam="10px;";}
-                                          ?>       
-                                            <span style="padding-left: <?php echo $tam;?>">- <?=$rowServicio['nombre']?></span>
-                                          <?
-                                          $x++;
-                                         }
-                                        ?>
-                                    </td>
-                                </tr>
-                                -->
+                 
                             </table>
                         </td>
                     </tr>
-                    <!--
-                    <tr>
-                    <td>
-                    <table width="100%" style="font-family: Arial;font-size: 12px;">
-                    <tr>
-                    <td><strong>Tipo de Propiedad:</strong></td>
-                    <td><?=$rowPropiedad['tipoProp']?></td>
-                    </tr>
-                    <tr>
-                    <td><strong>Direcci&oacute;n:</strong></td>
-                    <td><?=$rowPropiedad['direccion']?></td>
-                    </tr>
-                    <tr>
-                    <td><strong>Capacidad:</strong></td>
-                    <td><?=$rowPropiedad['capacidad']?></td>
-                    </tr>
-                    <tr>
-                    <td><strong>Habitaciones:</strong></td>
-                    <td><?=$rowPropiedad['habitaciones']?></td>
-                    </tr>
-                    <tr>
-                    <td colspan="2">
-                    <?
-                    $querynHabitin=mysql_query("select * from propiedad_habitaciones where id_propiedad='".$_GET['id']."'");
-                   
-                    $numnero=mysql_num_rows($querynHabitin);
-                    $contenido="<table width='70%' cellspacing='0' style='font-family: Arial;font-size: 12px;'>";
-                    $i=0;
-                    while( $queryHabDorm=mysql_fetch_assoc($querynHabitin)){
-                      $contenido.="<tr><td width='160px'><strong>Habitaci&oacute;n ".($i+1)."</strong></td><td>";
-                      $arregloCamas=devuelve_valor($queryHabDorm['id_cama'],"nombre","tipo_camas","id");
-                      $contenido.=$arregloCamas['nombre'];
-                      $contenido.="</td></tr>";
-                      $i++;
-                    }
-                    $contenido.="</table>";
-                    echo $contenido;
-                    ?>
-                    </td>
-                    </tr>
-                    
-                    <tr>
-                    <td><strong>Ba&ntilde;os:</strong></td>
-                    <td><?=$rowPropiedad['banos']?></td>
-                    </tr>
-                    </table>
-                    
-                    </td>
-                    <td valign="top">
-                    <table width="100%" style="font-family: Arial;">
-                    <?
-             $x=0;  
-             $y=0;
-             $serviciosUsados=mysql_query("select servicios.nombre from propiedad_servicios inner join servicios on servicios.id=propiedad_servicios.id_servicio where id_propiedad='".$_GET['id']."'");
-             while($rowServicio=mysql_fetch_assoc($serviciosUsados)){
-                
-                      ?>       
-                        <tr><td>- <?=$rowServicio['nombre']?></td></tr>
-                        <?
-                       
-                     }
-                     ?>
-                    </table>
-                    </td>
-                    </tr>-->
+                 
                 </table>
          
             </td>
@@ -202,30 +122,37 @@ $sql="SELECT propiedades.id as idPropiedad,propiedades.*,propietarios.*, tipo_pr
     
 </td>
                     <style>
-                    #slides1 li{
+
+
+                    #slidesVic{
+                        margin: 0px;
+                        padding: 0px;
+                    }
+                    #slidesVic li{
                         list-style: none;
                          margin:0px 5px 0px 5px;
                          padding: 5px;
                     }
                     ul.thumbs li img{
-                       margin-left:5px;
-                       margin-bottom:10px
+                       /*margin-left:5px;*/
+                       margin-bottom:5px;
+                       border:5px solid #FBFBFB
                     }
                     ul.thumbs{
-                        margin:95px 5px 0px 5px;
+                        margin:115px 5px 0px 5px;
                         padding: 5px;
                     }
                     </style>
                    <script>
                         $(document).ready(function(){
-                            $('#slides1').bxGallery({
+                            $('#slidesVic').bxGallery({
                                maxheight :300,
-                                maxwidth :400,
-                                thumbwidth: 85,
+                                maxwidth :380,
+                                thumbwidth: 75,
                                 thumbplacement: 'right',
-                                thumbcontainer: 450,
+                                thumbcontainer: 380,
                                 thumbcrop:true, 
-                                load_image: 'includes/javascript/bxGallery/spinner.gif'
+                                load_image: 'sapv/images/ajax-loader.gif'
                             });
                       
                         });

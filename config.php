@@ -11,5 +11,4 @@ $colorLineaInf="#1D5987";
 $colorMenu="#5C9CCC";
 $nombreSistema="SISTEMA ADMINISTRATIVO DE PROPIEDADES <BR> SPAVA";
 $rutaCompleta="";
-$OtraCompleta="http://127.0.0.1/sapv";
 ?>
